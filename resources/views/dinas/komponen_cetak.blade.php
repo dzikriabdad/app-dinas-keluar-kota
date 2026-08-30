@@ -144,7 +144,7 @@
     </div>
     <div class="sig-cell">
         <div class="sig-box">
-            <div class="sig-date">Kudus, {{ date('d F Y') }}</div>
+            <div class="sig-date">Kudus, {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</div>
             <div class="sig-title">Petugas</div>
             <div class="sig-space"></div>
             <div class="sig-line"></div>

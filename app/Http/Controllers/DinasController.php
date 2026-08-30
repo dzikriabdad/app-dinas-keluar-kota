@@ -112,4 +112,12 @@ class DinasController extends Controller
         fclose($handle);
         exit;
     }
+    public function cetak_admin($id)
+{
+    // Cari data berdasarkan ID
+    $dinas = \App\Models\FormDinas::findOrFail($id);
+    
+    // Tembak ke halaman cetak yang udah kita buat
+    return view('dinas.cetak', compact('dinas'));
+}
 }

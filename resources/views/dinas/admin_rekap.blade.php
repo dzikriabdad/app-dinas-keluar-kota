@@ -35,7 +35,7 @@
                     <th width="15%">Kota Tujuan</th>
                     <th width="15%">Tanggal Pelaksanaan</th>
                     <th width="15%">Jenis Form</th>
-                    <th width="20%">Aksi</th> <!-- INI KOLOM TOMBOL HAPUSNYA -->
+                    <th width="20%">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,13 +49,20 @@
                     <td class="text-center">
                         <span class="badge bg-secondary">{{ strtoupper(str_replace('_', ' ', $d->jenis_form)) }}</span>
                     </td>
-                    <td class="text-center">
-                        <!-- INI TOMBOL HAPUSNYA -->
-                        <form action="{{ route('admin.hapus', $d->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus form milik {{ $d->nama }}?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm fw-bold w-100">🗑️ Hapus Data</button>
-                        </form>
+                    <td class="text-center align-middle">
+                        <div class="d-flex gap-2 justify-content-center">
+                            <!-- TOMBOL CETAK ADMIN -->
+                            <a href="{{ route('admin.cetak', $d->id) }}" target="_blank" class="btn btn-primary btn-sm text-white fw-bold w-100">
+                                🖨️ Cetak
+                            </a>
+                            
+                            <!-- TOMBOL HAPUS -->
+                            <form action="{{ route('admin.hapus', $d->id) }}" method="POST" class="m-0 w-100" onsubmit="return confirm('Yakin ingin menghapus form milik {{ $d->nama }}?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm fw-bold w-100">🗑️ Hapus</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @empty

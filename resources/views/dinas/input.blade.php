@@ -109,8 +109,9 @@
                             </thead>
                             <tbody></tbody>
                         </table>
-                      <!-- UBAH INI -->
-<button type="submit" class="btn btn-primary px-5 fw-bold">Lihat Preview Form</button>
+                        <div class="mt-3">
+                          <button type="button" class="btn btn-outline-info btn-sm" onclick="tambahBaris('tablePraTugas', 'pra')">+ Tambah Baris</button>
+                        </div>
                     </div>
                 </div>
 
@@ -352,7 +353,7 @@
     // INISIALISASI KALENDER UTAMA
     flatpickr("#tanggalDokumen", { 
         mode: "range", 
-        dateFormat: "d M Y", 
+        dateFormat: "d F Y", 
         locale: "id",
         disableMobile: true,
         allowInput: false,

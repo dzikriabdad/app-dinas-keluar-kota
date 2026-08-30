@@ -17,3 +17,5 @@ Route::get('/admin/logout', [DinasController::class, 'logout'])->name('admin.log
 Route::get('/admin', [DinasController::class, 'index'])->name('admin.dinas');
 Route::delete('/admin/hapus/{id}', [DinasController::class, 'destroy'])->name('admin.hapus');
 Route::get('/admin/export', [DinasController::class, 'export'])->name('admin.export');
+// Tambahin di dalam prefix/group admin
+Route::get('/admin/cetak/{id}', [App\Http\Controllers\DinasController::class, 'cetak_admin'])->name('admin.cetak');

@@ -9,7 +9,7 @@
         
         /* JARAK 5 CM DARI ATAS (padding-top: 50mm) */
         .a4-container { width: 100%; min-height: auto; margin: 0; padding: 35mm 20mm 20mm 20mm; border: none; }
-        @page { size: A4; margin: 35mm 20mm 20mm 20mm; background-color: transparent; }
+        @page { size: A4; margin: 0; background-color: transparent; }
         
         .form-title { text-align: center; font-size: 24px; font-weight: bold; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 0.5px; }
         .meta-info { width: 100%; margin-bottom: 15px; font-size: 15px; border: none; border-collapse: collapse; }
@@ -36,12 +36,12 @@
         @include('dinas.komponen_cetak')
     </div>
 
-    <!-- SCRIPT AUTO-PRINT & KEMBALI -->
-    <script>
+   <script>
         window.onload = function() {
             window.print();
             setTimeout(function() {
-                window.location.href = "{{ route('dinas.create') }}";
+                // Menggunakan history.back() agar kembali ke form dengan data yang masih utuh
+                window.history.back();
             }, 1000);
         }
     </script>

@@ -39,7 +39,7 @@
     
     <!-- TOMBOL PREVIEW -->
     <div class="preview-bar">
-        <button onclick="history.back()" class="btn-edit">✏️ Kembali Edit (Data Belum Disimpan)</button>
+        <button onclick="history.back()" class="btn-edit">✏️ Kembali Edit (Data Belum Sesuai)</button>
         
         <form action="{{ route('dinas.store') }}" method="POST" style="margin: 0;">
             @csrf
@@ -53,7 +53,9 @@
                     <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                 @endif
             @endforeach
-            <button type="submit" class="btn-save">💾 Data Benar, Simpan & Cetak!</button>
+          <button type="submit" style="background-color: #198754; color: white; border: none; padding: 10px 24px; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; margin-left: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" onclick="return confirm('PENGINGAT PENTING:\n\nMohon di cetak dengan kertas KOP PT Sukun Wartono Indonesia\n\nLanjutkan Simpan & Cetak?');">
+    💾 Data Benar, Simpan & Cetak!
+</button>
         </form>
     </div>
 
