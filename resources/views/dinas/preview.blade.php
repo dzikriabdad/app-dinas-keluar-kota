@@ -39,7 +39,7 @@
     
     <!-- TOMBOL PREVIEW -->
     <div class="preview-bar">
-        <button onclick="history.back()" class="btn-edit">✏️ Kembali Edit (Data Belum Sesuai)</button>
+        <button onclick="history.back()" class="btn-edit"> Kembali</button>
         
         <form action="{{ route('dinas.store') }}" method="POST" style="margin: 0;">
             @csrf

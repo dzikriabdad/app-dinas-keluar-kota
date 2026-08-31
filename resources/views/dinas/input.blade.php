@@ -40,7 +40,7 @@
         <div class="col-lg-11">
             <h2 class="text-center fw-bold mb-4">Aplikasi Form Dinas Keluar Kota</h2>
             <h3 class="text-center fw-bold mb-4">PT. Sukun Wartono Indonesia</h3>
-           <form action="{{ route('dinas.preview') }}" method="POST" id="formDinas">
+            <form action="{{ route('dinas.preview') }}" method="POST" id="formDinas">
                 @csrf
                 
                 <!-- 1. Data Umum Pegawai -->
@@ -156,10 +156,9 @@
                                     <th width="8%">Hari</th>
                                     <th width="15%">Nominal</th>
                                     <th width="15%">Total (Rp)</th>
-                                    <!-- Kolom Aksi sudah dihapus dari sini -->
                                 </tr>
                             </thead>
-                            <!-- Tbody Grup -->
+                            <!-- Tbody Grup akan di-generate oleh JS -->
                             <tfoot>
                                 <tr>
                                     <td colspan="5" class="text-end fw-bold align-middle">GRAND TOTAL MAKAN & SNACK:</td>
@@ -177,12 +176,11 @@
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label">Tanggal Pelaksanaan</label>
-                                <input type="text" name="undangan_tgl" class="form-control date-range-undangan bg-white locked-date" placeholder="Misal: 15-16 Ags" readonly onkeydown="return false;">
+                                <input type="text" name="undangan_tgl" class="form-control date-range-undangan bg-white locked-date" placeholder="Pilih dari form atas" readonly required onkeydown="return false;">
                             </div>
                             <div class="col-md-8">
-                                <!-- DROPDOWN PINTAR KALENDER PABRIK -->
                                 <label class="form-label fw-bold text-primary">Kategori Hari Pelaksanaan</label>
-                                <select id="pilihKategoriHari" class="form-select border-primary">
+                                <select id="pilihKategoriHari" class="form-select border-primary" required>
                                     <option value="" disabled selected>-- Pilih Jenis Hari --</option>
                                     <option value="200000">Hari Kerja (Biasa / Jumat Pas Masuk)</option>
                                     <option value="300000">Hari Libur (Jumat Normal / Rabu Kliwon / Kamis Pon)</option>
@@ -192,14 +190,13 @@
                             
                             <div class="col-md-8">
                                 <label class="form-label">Realisasi Kegiatan</label>
-                                <textarea name="undangan_kegiatan" class="form-control" rows="3" placeholder="Tulis rincian kegiatan..."></textarea>
+                                <textarea name="undangan_kegiatan" class="form-control" rows="3" placeholder="Tulis rincian kegiatan..." required></textarea>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Uang Tugas (Terisi Otomatis)</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light fw-bold">Rp</span>
-                                    <!-- Input ini di-readonly biar nggak bisa diakali petugas -->
-                                    <input type="number" name="undangan_uang" id="undanganUang" class="form-control fw-bold text-success bg-light" readonly placeholder="0">
+                                    <input type="number" name="undangan_uang" id="undanganUang" class="form-control fw-bold text-success bg-light" readonly placeholder="0" required>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +241,7 @@
         "Manager": { "Kudus": {ut: 0, um: 0}, "Kars. Pati": {ut: 150000, um: 'REIMBURSE'}, "Jateng & DIY": {ut: 200000, um: 'REIMBURSE'}, "Jatim & Madura": {ut: 250000, um: 'REIMBURSE'}, "Jabar & DKI": {ut: 300000, um: 'REIMBURSE'}, "Luar Jawa": {ut: 400000, um: 'REIMBURSE'} }
     };
 
-   const optionsWilayah = `
+    const optionsWilayah = `
         <option value="Kudus">Kudus</option>
         <option value="Kars. Pati">Kars. Pati</option>
         <option value="Jateng & DIY">Jateng & DIY</option>
@@ -253,65 +250,24 @@
         <option value="Luar Jawa">Luar Jawa</option>
     `;
     
-
-   // DETEKSI KOTA -> WILAYAH (100% SESUAI ATURAN COVERAGE AREA KANTOR)
+    // DETEKSI KOTA -> WILAYAH
     function autoDeteksiWilayah(kotaInput) {
         let k = kotaInput.toLowerCase();
         
-        // 1. KUDUS
         if (k.includes('kudus')) return 'Kudus';
-        
-        // 2. KARESIDENAN PATI
         let karsPati = ['jepara', 'pati', 'rembang', 'blora'];
         if (karsPati.some(c => k.includes(c))) return 'Kars. Pati';
         
-        // 3. JATENG & DIY (Termasuk Pacitan yang masuk coverage Jateng 3)
-        let jatengDiy = [
-            'demak', 'grobogan', 'purwodadi', 'semarang', 'salatiga', 'kendal', 
-            'batang', 'pekalongan', 'tegal', 'brebes', 'pemalang', 'banyumas', 
-            'purwokerto', 'purbalingga', 'cilacap', 'kebumen', 'temanggung', 
-            'wonosobo', 'banjarnegara', 'surakarta', 'solo', 'karanganyar', 
-            'sragen', 'boyolali', 'klaten', 'sukoharjo', 'magelang', 'purworejo', 
-            'yogjakarta', 'yogyakarta', 'jogja', 'bantul', 'sleman', 'kulon progo', 
-            'wonogiri', 'gunung kidul', 'pacitan'
-        ];
+        let jatengDiy = ['demak', 'grobogan', 'purwodadi', 'semarang', 'salatiga', 'kendal', 'batang', 'pekalongan', 'tegal', 'brebes', 'pemalang', 'banyumas', 'purwokerto', 'purbalingga', 'cilacap', 'kebumen', 'temanggung', 'wonosobo', 'banjarnegara', 'surakarta', 'solo', 'karanganyar', 'sragen', 'boyolali', 'klaten', 'sukoharjo', 'magelang', 'purworejo', 'yogjakarta', 'yogyakarta', 'jogja', 'bantul', 'sleman', 'kulon progo', 'wonogiri', 'gunung kidul', 'pacitan'];
         if (jatengDiy.some(c => k.includes(c))) return 'Jateng & DIY';
         
-        // 4. JATIM & MADURA
-        let jatim = [
-            'malang', 'batu', 'pasuruan', 'lumajang', 'probolinggo', 'jember', 
-            'bondowoso', 'situbondo', 'banyuwangi', 'sampang', 'pamekasan', 
-            'sumenep', 'bangkalan', 'sidoarjo', 'surabaya', 'gresik', 'jombang', 
-            'mojokerto', 'lamongan', 'babat', 'bojonegoro', 'tuban', 'nganjuk', 
-            'kediri', 'tulungagung', 'blitar', 'trenggalek', 'madiun', 'ponorogo', 
-            'ngawi', 'magetan'
-        ];
+        let jatim = ['malang', 'batu', 'pasuruan', 'lumajang', 'probolinggo', 'jember', 'bondowoso', 'situbondo', 'banyuwangi', 'sampang', 'pamekasan', 'sumenep', 'bangkalan', 'sidoarjo', 'surabaya', 'gresik', 'jombang', 'mojokerto', 'lamongan', 'babat', 'bojonegoro', 'tuban', 'nganjuk', 'kediri', 'tulungagung', 'blitar', 'trenggalek', 'madiun', 'ponorogo', 'ngawi', 'magetan'];
         if (jatim.some(c => k.includes(c))) return 'Jatim & Madura';
         
-        // 5. JABAR & DKI (DKI 1 & DKI 2)
-        let jabarDki = [
-            'jakarta', 'seribu', 'depok', 'bekasi', 'bogor', 'pandeglang', 'serang', 
-            'cilegon', 'karawang', 'tangerang', 'bandung', 'cimahi', 'garut', 
-            'sumedang', 'ciamis', 'pangandaran', 'tasikmalaya', 'banjar', 'cianjur', 
-            'sukabumi', 'cirebon', 'kuningan', 'majalengka', 'indramayu', 'purwakarta', 'subang'
-        ];
+        let jabarDki = ['jakarta', 'seribu', 'depok', 'bekasi', 'bogor', 'pandeglang', 'serang', 'cilegon', 'karawang', 'tangerang', 'bandung', 'cimahi', 'garut', 'sumedang', 'ciamis', 'pangandaran', 'tasikmalaya', 'banjar', 'cianjur', 'sukabumi', 'cirebon', 'kuningan', 'majalengka', 'indramayu', 'purwakarta', 'subang'];
         if (jabarDki.some(c => k.includes(c))) return 'Jabar & DKI';
         
-        // 6. LUAR JAWA (Data Kantor + Backup Umum)
-        let luarJawa = [
-            // Dari List Kantor
-            'banjarmasin', 'tanah laut', 'pangkalan bun', 'kotawari', 'bali', 
-            'denpasar', 'lombok', 'lampung', 'jambi', 'sarolangun', 'pekanbaru', 
-            'rokanhilir', 'indragiri hulu', 'indragiri hilir', 
-            // Backup Kota Luar Jawa Lainnya biar tetep aman
-            'medan', 'padang', 'palembang', 'batam', 'bengkulu', 'aceh', 
-            'pangkalpinang', 'tanjungpinang', 'dumai', 'bukittinggi', 'lubuklinggau', 
-            'pontianak', 'samarinda', 'balikpapan', 'palangkaraya', 'tarakan', 
-            'banjarbaru', 'singkawang', 'bontang', 'makassar', 'manado', 'palu', 
-            'kendari', 'bitung', 'gorontalo', 'palopo', 'baubau', 'parepare', 
-            'mataram', 'kupang', 'bima', 'ambon', 'ternate', 'jayapura', 'sorong', 
-            'manokwari', 'papua', 'maluku', 'sumatera', 'kalimantan', 'sulawesi', 'riau'
-        ];
+        let luarJawa = ['banjarmasin', 'tanah laut', 'pangkalan bun', 'kotawari', 'bali', 'denpasar', 'lombok', 'lampung', 'jambi', 'sarolangun', 'pekanbaru', 'rokanhilir', 'indragiri hulu', 'indragiri hilir', 'medan', 'padang', 'palembang', 'batam', 'bengkulu', 'aceh', 'pangkalpinang', 'tanjungpinang', 'dumai', 'bukittinggi', 'lubuklinggau', 'pontianak', 'samarinda', 'balikpapan', 'palangkaraya', 'tarakan', 'banjarbaru', 'singkawang', 'bontang', 'makassar', 'manado', 'palu', 'kendari', 'bitung', 'gorontalo', 'palopo', 'baubau', 'parepare', 'mataram', 'kupang', 'bima', 'ambon', 'ternate', 'jayapura', 'sorong', 'manokwari', 'papua', 'maluku', 'sumatera', 'kalimantan', 'sulawesi', 'riau'];
         if (luarJawa.some(c => k.includes(c))) return 'Luar Jawa';
         
         return ''; 
@@ -369,7 +325,7 @@
             }
             applyDateRestrictions();
             
-            // Opsional: Otomatis isi tanggal di Form Uang Makan
+            // Otomatis isi tanggal di Form Uang Makan
             $('.date-range-um').val(dateStr);
             if(selectedDates.length === 2) {
                 let diffTime = Math.abs(selectedDates[1] - selectedDates[0]);
@@ -379,6 +335,13 @@
                 $('.um-hari-makan').val(1).trigger('change');
             }
             $('.tgl-snack').val(dateStr);
+            
+            // Otomatis isi tanggal di form Undangan Dinas
+            $('.date-range-undangan').val(dateStr);
+            let fpUndangan = document.querySelector('.date-range-undangan');
+            if(fpUndangan && fpUndangan._flatpickr) {
+                fpUndangan._flatpickr.setDate(selectedDates);
+            }
         }
     });
 
@@ -417,10 +380,22 @@
         }
     }
 
+    // ===============================================
+    // JURUS DISABLE-ENABLE FORM MANDATORY
+    // ===============================================
     $('#jenisFormSelect').on('change', function() {
         $('.form-section').removeClass('active');
+        
+        // Disable semua input di bagian form-section agar browser abaikan validasinya
+        $('.form-section').find('input, select, textarea, button').prop('disabled', true);
+        
         let val = $(this).val();
-        if(val) $('#section_' + val).addClass('active');
+        if(val) {
+            $('#section_' + val).addClass('active');
+            
+            // Aktifkan hanya input/tombol di form yang lagi tampil
+            $('#section_' + val).find('input, select, textarea, button').prop('disabled', false);
+        }
     });
 
     function hitungTotalPasca() {
@@ -449,14 +424,14 @@
         else $('#grandTotalUM').val(grandTotal);
     }
 
-    const lockAttr = 'readonly onkeydown="return false;" autocomplete="off" class="form-control locked-date bg-white';
+    const lockAttr = 'readonly onkeydown="return false;" autocomplete="off"';
 
     function tambahBaris(tableId, tipe) {
         let tbody = '';
         if(tipe === 'pra') {
             tbody = `<tr>
-                        <td><input type="text" name="pra_tgl[]" ${lockAttr} date-single" placeholder="Pilih tgl"></td>
-                        <td><input type="text" name="pra_kegiatan[]" class="form-control" placeholder="Rencana aktivitas..."></td>
+                        <td><input type="text" name="pra_tgl[]" ${lockAttr} class="form-control locked-date bg-white date-single" placeholder="Pilih tgl" required></td>
+                        <td><input type="text" name="pra_kegiatan[]" class="form-control" placeholder="Rencana aktivitas..." required></td>
                         <td class="align-middle"><button type="button" class="btn btn-danger btn-sm w-100 btn-hapus-single-pra">Hapus</button></td>
                      </tr>`;
             $('#' + tableId + ' tbody').append(tbody);
@@ -464,12 +439,11 @@
         
         } else if(tipe === 'pasca') {
             tbody = `<tr>
-                        <td><input type="text" name="pasca_tgl[]" ${lockAttr} date-single" placeholder="Pilih tgl"></td>
-                        <td><input type="text" name="pasca_kegiatan[]" class="form-control" placeholder="Realisasi aktivitas..."></td>
+                        <td><input type="text" name="pasca_tgl[]" ${lockAttr} class="form-control locked-date bg-white date-single" placeholder="Pilih tgl" required></td>
+                        <td><input type="text" name="pasca_kegiatan[]" class="form-control" placeholder="Realisasi aktivitas..." required></td>
                         <td>
-                            <!-- d-none dihapus agar dropdown terlihat -->
-                            <select class="form-select form-select-sm mb-1 row-wilayah text-primary fw-bold"><option value="" disabled selected>Pilih Wilayah</option>${optionsWilayah}</select>
-                            <input type="text" name="pasca_uang[]" class="form-control uang-tugas text-success px-2 bg-light fw-bold" readonly placeholder="Auto">
+                            <select name="pasca_wilayah[]" class="form-select form-select-sm mb-1 row-wilayah text-primary fw-bold" required><option value="" disabled selected>Pilih Wilayah</option>${optionsWilayah}</select>
+                            <input type="text" name="pasca_uang[]" class="form-control uang-tugas text-success px-2 bg-light fw-bold" readonly placeholder="Auto" required>
                         </td>
                         <td class="align-middle"><button type="button" class="btn btn-danger btn-sm w-100 btn-hapus-single-pasca">Hapus</button></td>
                      </tr>`;
@@ -479,24 +453,23 @@
         } else if(tipe === 'um') {
             tbody = `<tbody class="um-group border-bottom border-dark">
                         <tr>
-                            <td><input type="text" name="um_ket[]" class="form-control fw-bold border-0 bg-transparent px-1" value="Uang Makan" readonly></td>
-                            <td><input type="text" name="um_kota[]" class="form-control input-kota-um px-1 border-primary" placeholder="Ketik Kota..."></td>
-                            <td><input type="text" name="um_tgl[]" ${lockAttr} date-range-um px-1" placeholder="Pilih tgl"></td>
-                            <td><input type="number" name="um_hari[]" class="form-control um-hari-makan text-center px-1 fw-bold bg-light" readonly placeholder="0"></td>
+                            <td><input type="text" name="um_ket[]" class="form-control fw-bold border-0 bg-transparent px-1" value="Uang Makan" readonly required></td>
+                            <td><input type="text" name="um_kota[]" class="form-control input-kota-um px-1 border-primary" placeholder="Ketik Kota..." required></td>
+                            <td><input type="text" name="um_tgl[]" ${lockAttr} class="form-control locked-date bg-white date-range-um px-1" placeholder="Pilih tgl" required></td>
+                            <td><input type="number" name="um_hari[]" class="form-control um-hari-makan text-center px-1 fw-bold bg-light" readonly placeholder="0" required></td>
                             <td>
-                                <!-- d-none dihapus agar dropdown terlihat -->
-                                <select class="form-select form-select-sm mb-1 row-wilayah text-primary fw-bold"><option value="" disabled selected>Pilih Wilayah</option>${optionsWilayah}</select>
-                                <input type="text" name="um_nominal[]" class="form-control um-nominal text-success fw-bold bg-light px-1" readonly placeholder="Auto">
+                                <select name="um_wilayah[]" class="form-select form-select-sm mb-1 row-wilayah text-primary fw-bold" required><option value="" disabled selected>Pilih Wilayah</option>${optionsWilayah}</select>
+                                <input type="text" name="um_nominal[]" class="form-control um-nominal text-success fw-bold bg-light px-1" readonly placeholder="Auto" required>
                             </td>
-                            <td class="align-middle"><input type="text" name="um_total[]" class="form-control um-total fw-bold bg-light px-1 text-primary" readonly></td>
+                            <td class="align-middle"><input type="text" name="um_total[]" class="form-control um-total fw-bold bg-light px-1 text-primary" readonly required></td>
                         </tr>
                         <tr class="bg-snack">
-                            <td><input type="text" name="um_ket[]" class="form-control fw-bold border-0 bg-transparent text-secondary px-1" value="Uang Snack" readonly></td>
-                            <td><input type="text" name="um_kota[]" class="form-control kota-snack border-0 bg-transparent text-secondary px-1" readonly placeholder="-"></td>
-                            <td><input type="text" name="um_tgl[]" class="form-control tgl-snack border-0 bg-transparent text-secondary px-1" readonly placeholder="-"></td>
-                            <td><input type="number" name="um_hari[]" class="form-control text-center border-0 bg-transparent text-secondary px-1" value="1" readonly></td>
-                            <td><input type="number" name="um_nominal[]" class="form-control um-nominal-snack fw-bold text-success bg-light px-1" value="40000" readonly></td>
-                            <td class="align-middle"><input type="text" name="um_total[]" class="form-control um-total-snack fw-bold border-0 bg-transparent px-1 text-primary" value="40000" readonly></td>
+                            <td><input type="text" name="um_ket[]" class="form-control fw-bold border-0 bg-transparent text-secondary px-1" value="Uang Snack" readonly required></td>
+                            <td><input type="text" name="um_kota[]" class="form-control kota-snack border-0 bg-transparent text-secondary px-1" readonly placeholder="-" required></td>
+                            <td><input type="text" name="um_tgl[]" class="form-control tgl-snack border-0 bg-transparent text-secondary px-1" readonly placeholder="-" required></td>
+                            <td><input type="number" name="um_hari[]" class="form-control text-center border-0 bg-transparent text-secondary px-1" value="1" readonly required></td>
+                            <td><input type="number" name="um_nominal[]" class="form-control um-nominal-snack fw-bold text-success bg-light px-1" value="40000" readonly required></td>
+                            <td class="align-middle"><input type="text" name="um_total[]" class="form-control um-total-snack fw-bold border-0 bg-transparent px-1 text-primary" value="40000" readonly required></td>
                         </tr>
                      </tbody>`;
             $('#' + tableId).append(tbody);
@@ -512,17 +485,12 @@
         if(tipe === 'um') hitungGrandTotalUM();
     }
 
-    // ===============================================
-    // FITUR BARU: AUTO-SYNC KOTA (TANPA REFRESH)
-    // ===============================================
+    // AUTO-SYNC KOTA
     $('#kotaTujuanGlobal').on('keyup blur', function() {
         let kota = $(this).val();
         let deteksiWilayah = autoDeteksiWilayah(kota);
         
-        // 1. Paksa timpa nama kota di tabel Uang Makan
         $('#tableUangMakan .input-kota-um').val(kota).trigger('blur');
-        
-        // 2. Paksa update wilayah di Pasca Tugas
         if(deteksiWilayah) {
             $('#tablePascaTugas .row-wilayah').val(deteksiWilayah).trigger('change');
         }
@@ -536,11 +504,8 @@
         if(deteksiWilayah) group.find('.row-wilayah').val(deteksiWilayah).trigger('change');
     });
 
-    // ===============================================
-    // FITUR BARU: AUTO-SYNC JABATAN (TANPA REFRESH)
-    // ===============================================
+    // AUTO-SYNC JABATAN
     $('#jabatanSelect').on('change', function() {
-        // Saat jabatan diganti, pancing ulang kolom wilayah biar nominalnya dikalkulasi ulang!
         $('.row-wilayah').trigger('change');
     });
 
@@ -591,6 +556,9 @@
     });
 
     $(document).ready(function() {
+        // Trigger select jenis_form di awal buat nyembunyiin + disable semua section
+        $('#jenisFormSelect').trigger('change');
+        
         initDatePickerChild(); 
         tambahBaris('tablePraTugas', 'pra');
         tambahBaris('tablePascaTugas', 'pasca');
