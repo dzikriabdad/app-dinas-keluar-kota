@@ -1,9 +1,41 @@
+/* ══════════════════════════════════════════════════════════
+   ENTRY POINT CSS — Laravel + Vite + Tailwind v4
+   Lokasi: resources/css/app.css
+   Build : npm run build
+══════════════════════════════════════════════════════════ */
+
+/* 1) Tailwind — wajib paling atas */
 @import 'tailwindcss';
 
+/* 2) Design system bersama (home · order · dinas) */
+@import './theme.css';
+
+/* 3) Sumber kelas Tailwind */
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
 
+/* 4) Token Tailwind — supaya utility class senada dengan theme.css */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Warna */
+    --color-navy-900: #0b1d38;
+    --color-navy-800: #12305c;
+    --color-navy-700: #1a4a8c;
+    --color-ink: #0f172a;
+    --color-inksoft: #41506a;
+    --color-muted: #6b7a90;
+    --color-line: #e3e9f2;
+    --color-surface: #ffffff;
+    --color-fieldbg: #fbfcff;
+    --color-notewarn: #7a4a05;
+    --color-okgreen: #136b41;
+    --color-badred: #b02a2a;
+
+    /* Radius */
+    --radius-card: 20px;
+    --radius-box: 14px;
+    --radius-input: 11px;
 }

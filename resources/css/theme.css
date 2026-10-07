@@ -1,0 +1,869 @@
+/* ══════════════════════════════════════════════════════════
+   DESIGN SYSTEM — dipakai bersama oleh semua halaman
+   home · order · dinas · preview · cetak · rekap
+   Lokasi: resources/css/theme.css
+   Di-import dari app.css — JANGAN di-link manual.
+══════════════════════════════════════════════════════════ */
+
+/* ── TOKENS ────────────────────────────────────────────── */
+:root{
+  --navy-900:#0b1d38;
+  --navy-800:#12305c;
+  --navy-700:#1a4a8c;
+  --blue-600:#2563eb;
+  --blue-500:#3b82f6;
+
+  --ink:#0f172a;
+  --ink-soft:#41506a;
+  --muted:#6b7a90;
+
+  --line:#e3e9f2;
+  --line-soft:#eef2f8;
+
+  --surface:#ffffff;
+  --field:#fbfcff;
+
+  --amber:#7a4a05;
+  --amber-bg:#fff8ec;
+  --amber-line:#f2cd8b;
+
+  --green:#136b41;
+  --red:#b02a2a;
+
+  --r-lg:20px;
+  --r-md:14px;
+  --r-sm:11px;
+
+  --shadow-card:0 1px 2px rgba(12,29,56,.05), 0 18px 44px rgba(12,29,56,.08);
+  --shadow-pop:0 34px 80px rgba(8,21,43,.34);
+  --shadow-btn:0 10px 24px rgba(18,48,92,.26);
+
+  --grad-brand:linear-gradient(120deg,#0a1a33 0%, #12305c 52%, #1c4d95 100%);
+  --grad-btn:linear-gradient(135deg,#12305c 0%, #2563eb 100%);
+  --grad-btn-hover:linear-gradient(135deg,#164078 0%, #3b82f6 100%);
+  --focus-ring:0 0 0 4px rgba(59,130,246,.14);
+
+  --page-max:880px;
+}
+
+/* ── LAYAR ─────────────────────────────────────────────── */
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  color:var(--ink);
+  font-size:14px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  background:
+    radial-gradient(1100px 520px at 10% -10%, #e3ecfb 0%, transparent 62%),
+    radial-gradient(900px 480px at 100% 0%, #e9f1fd 0%, transparent 58%),
+    #f4f7fc;
+  background-attachment:fixed;
+}
+
+/* ── TOP BAR ───────────────────────────────────────────── */
+.topbar{
+  position:relative;
+  background:var(--grad-brand);
+  color:#fff;
+  overflow:hidden;
+}
+
+.topbar::after{
+  content:"";
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(620px 220px at 86% -55%, rgba(56,189,248,.38), transparent 70%),
+    radial-gradient(420px 180px at 6% 130%, rgba(37,99,235,.30), transparent 70%);
+}
+
+.topbar-inner{
+  position:relative;z-index:1;
+  max-width:var(--page-max);margin:0 auto;
+  padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+
+.brand{display:flex;align-items:center;gap:13px;min-width:0;text-decoration:none;color:inherit}
+
+.brand-mark{
+  width:38px;height:38px;flex-shrink:0;
+  border-radius:11px;
+  background:linear-gradient(140deg, rgba(255,255,255,.22), rgba(255,255,255,.06));
+  border:1px solid rgba(255,255,255,.22);
+  display:flex;align-items:center;justify-content:center;
+  color:#e6f1ff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28), 0 6px 16px rgba(3,12,28,.35);
+}
+
+.brand-mark svg{width:19px;height:19px}
+
+.brand-text strong{display:block;font-size:14px;font-weight:600;letter-spacing:.1px}
+.brand-text small{display:block;font-size:11.5px;color:rgba(255,255,255,.66);margin-top:2px}
+
+.topbar-tag{
+  font-size:10.5px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;
+  color:#dcebff;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.20);
+  padding:6px 12px;border-radius:999px;white-space:nowrap;
+  backdrop-filter:blur(6px);
+}
+
+.topbar-back{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12.5px;font-weight:600;color:#dcebff;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.20);
+  padding:8px 14px;border-radius:10px;
+  text-decoration:none;white-space:nowrap;
+  transition:background .2s ease,border-color .2s ease;
+}
+
+.topbar-back svg{width:15px;height:15px}
+.topbar-back:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.34)}
+.topbar-back:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.28)}
+
+/* ── HALAMAN ───────────────────────────────────────────── */
+.page{max-width:var(--page-max);margin:0 auto;padding:38px 24px 60px}
+.page-wide{--page-max:1080px}
+
+.page-head{margin-bottom:22px}
+.page-head h1{font-size:23px;font-weight:700;letter-spacing:-.4px;line-height:1.25}
+.page-head p{color:var(--muted);margin-top:8px;font-size:13.5px;max-width:640px}
+.page-head .rule{
+  width:52px;height:3px;border-radius:3px;
+  margin-top:14px;
+  background:linear-gradient(90deg,#12305c,#38bdf8);
+}
+
+.page-footer{text-align:center;margin-top:28px;font-size:12px;color:var(--muted)}
+
+/* ── KARTU ─────────────────────────────────────────────── */
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-card);
+  overflow:hidden;
+}
+
+.card + .card{margin-top:18px}
+
+.card-head{
+  display:flex;align-items:center;gap:11px;
+  padding:15px 26px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#f6f9fd,#eef3fa);
+  font-size:12.5px;font-weight:700;letter-spacing:.2px;
+  color:var(--navy-800);
+}
+
+.card-head::before{
+  content:"";width:4px;height:16px;border-radius:3px;flex-shrink:0;
+  background:var(--grad-btn);
+}
+
+.card-body{padding:24px 26px}
+
+/* ── TAB ───────────────────────────────────────────────── */
+.tabs{
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:1fr;
+  gap:5px;
+  padding:7px;
+  background:linear-gradient(180deg,#f3f6fc,#eef3fa);
+  border-bottom:1px solid var(--line);
+}
+
+.tab{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  padding:12px 8px;
+  border:0;background:transparent;border-radius:var(--r-sm);
+  font:inherit;font-size:13.5px;font-weight:600;color:var(--muted);
+  cursor:pointer;
+  transition:background .2s ease,color .2s ease,box-shadow .2s ease;
+}
+
+.tab svg{width:17px;height:17px;flex-shrink:0}
+.tab:hover{color:var(--navy-800);background:rgba(255,255,255,.85)}
+.tab.active{background:var(--grad-btn);color:#fff;box-shadow:0 6px 16px rgba(18,48,92,.24)}
+.tab:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+
+/* ── FORMULIR ──────────────────────────────────────────── */
+.form-body{padding:28px 32px 32px}
+
+.form-section{display:none}
+.form-section.active{display:block;animation:fadeUp .3s cubic-bezier(.2,.9,.3,1.05)}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.legend{
+  display:flex;align-items:center;gap:11px;
+  font-size:11px;font-weight:700;letter-spacing:.95px;text-transform:uppercase;
+  color:var(--navy-800);
+  margin:4px 0 16px;
+}
+
+.legend-num{
+  width:20px;height:20px;flex-shrink:0;
+  border-radius:6px;
+  background:linear-gradient(140deg,#12305c,#2f6ac4);
+  color:#fff;
+  font-size:10.5px;font-weight:700;letter-spacing:0;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 8px rgba(18,48,92,.24);
+}
+
+.legend::after{
+  content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,var(--line),transparent);
+}
+
+.field{margin-bottom:16px}
+.field > label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:7px}
+.hint{font-weight:400;color:var(--muted)}
+
+/* ── INPUT DASAR ───────────────────────────────────────── */
+.form-body input,
+.form-body select,
+.form-body textarea,
+.card-body input,
+.card-body select,
+.card-body textarea{
+  width:100%;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:var(--r-sm);
+  background:var(--field);
+  font:inherit;font-size:13.5px;color:var(--ink);
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+  outline:none;
+}
+
+.form-body input:hover,
+.form-body select:hover,
+.form-body textarea:hover,
+.card-body input:hover,
+.card-body select:hover,
+.card-body textarea:hover{border-color:#cfd9e8}
+
+.form-body input:focus,
+.form-body select:focus,
+.form-body textarea:focus,
+.card-body input:focus,
+.card-body select:focus,
+.card-body textarea:focus{
+  border-color:var(--blue-500);
+  background:#fff;
+  box-shadow:var(--focus-ring);
+}
+
+.form-body input::placeholder,
+.form-body textarea::placeholder,
+.card-body input::placeholder,
+.card-body textarea::placeholder{color:#9dabc0}
+
+.form-body select,
+.card-body select{
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7a90' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 13px center;
+  padding-right:38px;
+  cursor:pointer;
+}
+
+.form-body textarea,
+.card-body textarea{resize:vertical;min-height:72px}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+
+.divider{
+  border:0;height:1px;margin:26px 0 24px;
+  background:linear-gradient(90deg,transparent,var(--line),transparent);
+}
+
+.field.error input{border-color:#e29a9a;background:#fdf5f5;box-shadow:0 0 0 4px rgba(176,42,42,.08)}
+.error-msg{display:none;font-size:11.5px;color:var(--red);margin-top:6px;font-weight:500}
+.field.error .error-msg{display:block}
+
+.field-note{font-size:11.5px;margin-top:6px;line-height:1.5;color:var(--muted)}
+.field-note-ok{color:var(--green);font-weight:600}
+.field-note-warn{color:var(--red);font-weight:600}
+
+/* ── INPUT GROUP (prefix Rp) ───────────────────────────── */
+.input-group{display:flex;align-items:stretch}
+
+.input-group .input-prefix{
+  display:flex;align-items:center;
+  padding:0 14px;
+  border:1px solid var(--line);border-right:0;
+  border-radius:var(--r-sm) 0 0 var(--r-sm);
+  background:#f2f6fc;
+  font-size:13px;font-weight:600;color:var(--ink-soft);
+  white-space:nowrap;
+}
+
+.input-group input,
+.input-group select{border-radius:0 var(--r-sm) var(--r-sm) 0}
+
+/* ── PILIHAN RENTANG WAKTU ─────────────────────────────── */
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+
+.choice{
+  position:relative;
+  border:1px solid var(--line);
+  background:var(--field);
+  border-radius:var(--r-sm);
+  padding:12px 9px;
+  cursor:pointer;text-align:center;
+  font:inherit;
+  transition:border-color .2s ease,background .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+
+.choice:hover{
+  border-color:#bfd2ee;background:#fff;
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(18,48,92,.08);
+}
+
+.choice:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+
+.choice .c-title{font-size:11.5px;color:var(--muted);font-weight:500}
+.choice .c-time{font-size:13.5px;font-weight:600;color:var(--navy-800);margin-top:3px;letter-spacing:.2px}
+
+.choice.selected{background:var(--grad-btn);border-color:transparent;box-shadow:0 8px 20px rgba(18,48,92,.26)}
+.choice.selected .c-title{color:rgba(255,255,255,.76)}
+.choice.selected .c-time{color:#fff}
+
+/* ── SEGMENTED CONTROL ─────────────────────────────────── */
+.trip-row{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:16px}
+.trip-label{font-size:12.5px;font-weight:600;color:var(--ink-soft)}
+
+.seg{
+  display:inline-flex;gap:4px;
+  background:#eef3fa;
+  border:1px solid var(--line);
+  border-radius:12px;padding:4px;
+}
+
+.seg button{
+  border:0;background:transparent;font:inherit;
+  font-size:12.5px;font-weight:600;color:var(--muted);
+  padding:8px 16px;border-radius:9px;cursor:pointer;
+  transition:background .2s ease,color .2s ease,box-shadow .2s ease;
+}
+
+.seg button:hover{color:var(--navy-800)}
+.seg button:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.seg button.selected{background:#fff;color:var(--navy-800);box-shadow:0 2px 6px rgba(18,48,92,.14)}
+
+.pulang-field{display:none}
+.pulang-field.show{display:block;animation:fadeUp .25s ease}
+
+/* ── INPUT DENGAN TOMBOL ───────────────────────────────── */
+.venue-row{display:grid;grid-template-columns:1fr auto;gap:11px;align-items:stretch}
+
+.attach-btn{
+  border:1px solid var(--line);
+  background:var(--field);
+  border-radius:var(--r-sm);
+  padding:0 17px;
+  font:inherit;font-size:12.5px;font-weight:600;color:var(--ink-soft);
+  cursor:pointer;white-space:nowrap;
+  display:flex;align-items:center;gap:8px;
+  transition:border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;
+}
+
+.attach-btn svg{width:15px;height:15px}
+.attach-btn:hover{border-color:#bfd2ee;background:#fff;color:var(--navy-800)}
+.attach-btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.attach-btn.selected{background:var(--grad-btn);border-color:transparent;color:#fff;box-shadow:0 8px 20px rgba(18,48,92,.24)}
+
+/* ── KOTAK CATATAN ─────────────────────────────────────── */
+.note{
+  display:flex;gap:12px;
+  padding:14px 15px;
+  border:1px solid;
+  border-radius:13px;
+  font-size:12.5px;line-height:1.6;
+  position:relative;overflow:hidden;
+}
+
+.note::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px}
+.note svg{width:16px;height:16px;flex-shrink:0;margin-top:2px}
+.note strong{display:block;font-weight:600;margin-bottom:2px}
+
+.note-info{background:linear-gradient(180deg,#f4f7fd,#eef3fb);border-color:#d5e2f5;color:#2b4a78}
+.note-info::before{background:linear-gradient(180deg,#2563eb,#38bdf8)}
+
+.note-warn{background:linear-gradient(180deg,var(--amber-bg),#fff3e0);border-color:var(--amber-line);color:var(--amber)}
+.note-warn::before{background:linear-gradient(180deg,#e39a1e,#f5c76a)}
+
+.note-venue{display:none;margin-top:11px}
+.note-venue.show{display:flex;animation:fadeUp .22s ease}
+
+.note-block{margin-top:17px}
+
+/* ── CHECKBOX ──────────────────────────────────────────── */
+.check{
+  display:flex;align-items:flex-start;gap:11px;
+  margin-top:15px;padding:14px 15px;
+  background:var(--field);
+  border:1px solid var(--line);
+  border-radius:13px;
+  transition:border-color .2s ease,background .2s ease;
+}
+
+.check:hover{border-color:#cfd9e8;background:#fff}
+
+.check input[type="checkbox"]{
+  width:17px;height:17px;flex-shrink:0;margin-top:2px;
+  accent-color:var(--blue-600);cursor:pointer;
+}
+
+.check label{font-size:12.5px;color:var(--ink-soft);line-height:1.55;cursor:pointer}
+
+/* ── TOMBOL SUBMIT ─────────────────────────────────────── */
+.submit{
+  position:relative;
+  width:100%;margin-top:24px;
+  padding:15px 20px;
+  border:0;border-radius:13px;
+  background:var(--grad-btn);
+  color:#fff;
+  font:inherit;font-size:14px;font-weight:600;letter-spacing:.25px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:var(--shadow-btn);
+  overflow:hidden;
+  transition:background .22s ease,box-shadow .22s ease,transform .18s ease;
+}
+
+.submit::after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.16),transparent 55%);
+  pointer-events:none;
+}
+
+.submit:hover{background:var(--grad-btn-hover);box-shadow:0 14px 32px rgba(18,48,92,.32);transform:translateY(-1px)}
+.submit:active{transform:translateY(0)}
+.submit:focus-visible{outline:none;box-shadow:var(--shadow-btn), var(--focus-ring)}
+.submit:disabled{opacity:.66;cursor:not-allowed;transform:none;box-shadow:none}
+.submit svg{width:16px;height:16px}
+
+.spinner{
+  display:none;width:15px;height:15px;
+  border:2px solid rgba(255,255,255,.34);border-top-color:#fff;
+  border-radius:50%;animation:spin .6s linear infinite;
+}
+
+.submit.loading .spinner{display:block}
+.submit.loading .submit-arrow{display:none}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── AKSI FORM (baris tombol di bawah) ─────────────────── */
+.form-actions{
+  display:flex;justify-content:flex-end;gap:11px;
+  margin-top:24px;flex-wrap:wrap;
+}
+
+.form-actions .submit{
+  width:auto;margin-top:0;padding:15px 34px;
+}
+
+/* ── TOAST ─────────────────────────────────────────────── */
+.toast{
+  position:fixed;left:50%;top:18px;
+  transform:translate(-50%,-170%);
+  background:var(--navy-900);color:#fff;
+  padding:13px 22px;border-radius:12px;
+  font-size:13px;font-weight:500;
+  box-shadow:0 18px 44px rgba(8,21,43,.34);
+  z-index:9999;max-width:calc(100vw - 32px);text-align:center;
+  transition:transform .38s cubic-bezier(.2,.9,.3,1.12);
+}
+
+.toast.show{transform:translate(-50%,0)}
+.toast.error{background:#8f1f1f}
+.toast.success{background:var(--green)}
+
+/* ── MODAL ─────────────────────────────────────────────── */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(8,19,38,.56);
+  backdrop-filter:blur(5px);
+  z-index:9000;align-items:center;justify-content:center;padding:20px;
+}
+
+.overlay.active{display:flex}
+
+.modal{
+  background:#fff;border-radius:22px;
+  width:100%;max-width:570px;max-height:88vh;
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:var(--shadow-pop);
+  animation:modalIn .3s cubic-bezier(.2,.9,.3,1.05);
+}
+
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.95) translateY(14px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+
+.modal-head{
+  position:relative;
+  background:var(--grad-brand);
+  color:#fff;
+  padding:22px 26px;
+  display:flex;align-items:center;gap:14px;
+  overflow:hidden;
+}
+
+.modal-head::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(420px 160px at 88% -60%, rgba(56,189,248,.34), transparent 70%);
+}
+
+.modal-head > *{position:relative;z-index:1}
+
+.modal-head .m-icon{
+  width:40px;height:40px;flex-shrink:0;border-radius:12px;
+  background:linear-gradient(140deg, rgba(255,255,255,.22), rgba(255,255,255,.06));
+  border:1px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  color:#e6f1ff;
+}
+
+.modal-head .m-icon svg{width:19px;height:19px}
+.modal-head h3{font-size:15.5px;font-weight:600;letter-spacing:.1px}
+.modal-head p{font-size:12px;color:rgba(255,255,255,.66);margin-top:3px}
+
+.modal-body{padding:24px 26px;overflow-y:auto;flex:1}
+
+.rev-block{margin-bottom:20px}
+.rev-block:last-child{margin-bottom:0}
+
+.rev-title{
+  font-size:10.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--navy-800);
+  padding-bottom:8px;margin-bottom:5px;
+  border-bottom:1px solid var(--line);
+}
+
+.rev-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  gap:18px;padding:9px 0;
+  border-bottom:1px solid #f5f7fb;
+}
+
+.rev-row:last-child{border-bottom:0}
+.rev-label{font-size:12.5px;color:var(--muted);font-weight:500;flex-shrink:0}
+.rev-value{font-size:12.5px;color:var(--ink);font-weight:600;text-align:right;word-break:break-word}
+
+.rev-note{
+  position:relative;
+  display:flex;gap:10px;
+  margin-top:13px;padding:13px 15px;
+  border:1px solid var(--amber-line);
+  border-radius:12px;
+  background:linear-gradient(180deg,var(--amber-bg),#fff3e0);
+  font-size:12.5px;line-height:1.6;color:var(--amber);
+  overflow:hidden;
+}
+
+.rev-note::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#e39a1e,#f5c76a);
+}
+
+.rev-note svg{width:16px;height:16px;flex-shrink:0;margin-top:2px}
+
+.modal-foot{
+  display:flex;gap:12px;padding:17px 26px;
+  border-top:1px solid var(--line);
+  background:linear-gradient(180deg,#f8fafd,#f2f6fc);
+}
+
+.modal-foot button{
+  flex:1;padding:13px;
+  border:0;border-radius:12px;
+  font:inherit;font-size:13.5px;font-weight:600;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background .2s ease,box-shadow .2s ease,transform .18s ease;
+}
+
+.modal-foot button svg{width:15px;height:15px}
+
+.btn-secondary{background:#e7edf6;color:var(--ink-soft)}
+.btn-secondary:hover{background:#dae3f0}
+
+.btn-primary{background:linear-gradient(135deg,#0f7a48,#16a34a);color:#fff;box-shadow:0 10px 24px rgba(15,122,72,.26)}
+.btn-primary:hover{background:linear-gradient(135deg,#0c6a3e,#15803d);box-shadow:0 14px 30px rgba(15,122,72,.32);transform:translateY(-1px)}
+
+.modal-foot button:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+
+.modal-body::-webkit-scrollbar{width:6px}
+.modal-body::-webkit-scrollbar-track{background:#f4f7fb}
+.modal-body::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+
+/* ── KARTU PILIHAN (halaman awal) ──────────────────────── */
+.pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+.pick{
+  position:relative;
+  display:flex;flex-direction:column;
+  padding:26px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-card);
+  text-decoration:none;color:inherit;
+  overflow:hidden;
+  transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease;
+}
+
+.pick::before{
+  content:"";
+  position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,#12305c,#38bdf8);
+  opacity:0;
+  transition:opacity .24s ease;
+}
+
+.pick:hover{
+  transform:translateY(-3px);
+  border-color:#c3d5ef;
+  box-shadow:0 2px 4px rgba(12,29,56,.05), 0 26px 54px rgba(12,29,56,.14);
+}
+
+.pick:hover::before{opacity:1}
+.pick:focus-visible{outline:none;box-shadow:var(--shadow-card), var(--focus-ring)}
+
+.pick-icon{
+  width:48px;height:48px;flex-shrink:0;
+  border-radius:14px;
+  background:var(--grad-btn);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 20px rgba(18,48,92,.24);
+  margin-bottom:18px;
+}
+
+.pick-icon svg{width:23px;height:23px}
+
+.pick-title{font-size:17px;font-weight:700;letter-spacing:-.2px;color:var(--ink)}
+.pick-desc{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6}
+
+.pick-list{
+  list-style:none;
+  margin:18px 0 0;
+  padding:18px 0 0;
+  display:flex;flex-direction:column;gap:9px;
+  border-top:1px solid var(--line-soft);
+}
+
+.pick-list li{
+  display:flex;align-items:flex-start;gap:9px;
+  font-size:12.5px;color:var(--ink-soft);line-height:1.55;
+}
+
+.pick-list svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;color:var(--blue-600)}
+
+.pick-cta{
+  margin-top:auto;
+  padding-top:22px;
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:600;color:var(--navy-700);
+}
+
+.pick-cta svg{width:15px;height:15px;transition:transform .24s ease}
+.pick:hover .pick-cta svg{transform:translateX(4px)}
+
+/* ── TABEL ─────────────────────────────────────────────── */
+.table-wrap{
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
+  overflow:hidden;
+  background:var(--surface);
+}
+
+.table-scroll{overflow-x:auto}
+
+.table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+
+.table th{
+  text-align:left;
+  font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--navy-800);
+  background:linear-gradient(180deg,#f3f6fc,#eef3fa);
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+
+.table td{
+  padding:10px 12px;
+  border-bottom:1px solid var(--line-soft);
+  color:var(--ink-soft);
+  vertical-align:middle;
+}
+
+.table tbody tr:last-child td{border-bottom:0}
+.table tbody tr:hover td{background:#fafcff}
+
+.table .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* input di dalam tabel — dibuat lebih ringkas */
+.table input,
+.table select{
+  padding:8px 10px;
+  font-size:12.5px;
+  border-radius:8px;
+}
+
+.table select{
+  padding-right:32px;
+  background-position:right 10px center;
+}
+
+.table tfoot td{
+  background:#f8fafd;
+  font-weight:600;
+  color:var(--navy-800);
+}
+
+.table .uang-tugas,
+.table .um-nominal,
+.table .um-nominal-snack,
+.table .um-total,
+.table .um-total-snack,
+.table .um-hari-makan{
+  font-weight:700;
+  color:var(--navy-800);
+  background:#f4f7fc;
+}
+
+.table .cell-readonly{
+  background:transparent;
+  border-color:transparent;
+  color:var(--muted);
+  font-weight:500;
+}
+
+.table .um-snack-row td{background:#fafcff}
+
+.table .row-wilayah + .uang-tugas,
+.table .row-wilayah + .um-nominal{margin-top:6px}
+
+.table .input-kota-um{border-color:#bcd4f2}
+
+/* ── TOMBOL ────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 18px;
+  border:1px solid var(--line);
+  border-radius:var(--r-sm);
+  background:var(--surface);
+  font:inherit;font-size:13px;font-weight:600;color:var(--ink-soft);
+  cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;
+}
+
+.btn svg{width:15px;height:15px}
+.btn:hover{border-color:#bfd2ee;color:var(--navy-800);background:#fff}
+.btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+
+.btn-navy{background:var(--grad-btn);border-color:transparent;color:#fff;box-shadow:var(--shadow-btn)}
+.btn-navy:hover{background:var(--grad-btn-hover);color:#fff;box-shadow:0 14px 32px rgba(18,48,92,.32)}
+
+.btn-ghost{background:transparent;border-color:#c9dbf5;color:var(--navy-700)}
+.btn-ghost:hover{background:#f2f7fe;border-color:#a9c8ef;color:var(--navy-800)}
+
+.btn-danger{background:#fdeeee;border-color:#f2c9c9;color:#8f1f1f}
+.btn-danger:hover{background:#fbe0e0;border-color:#e9b3b3;color:#7a1a1a}
+
+.btn-sm{padding:8px 13px;font-size:12.5px}
+
+.btn-row{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}
+
+/* ── UTILITAS FORM DINAS ───────────────────────────────── */
+.locked-date{
+  caret-color:transparent;
+  cursor:pointer;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance:none;
+  margin:0;
+}
+
+input[type="number"]{-moz-appearance:textfield}
+
+/* ── RESPONSIVE ────────────────────────────────────────── */
+@media (max-width:900px){
+  .grid-3{grid-template-columns:1fr 1fr}
+}
+
+@media (max-width:760px){
+  .pick-grid{grid-template-columns:1fr;gap:14px}
+  .grid-3{grid-template-columns:1fr}
+}
+
+@media (max-width:680px){
+  .topbar-inner{padding:14px 18px}
+  .topbar-tag{display:none}
+  .page{padding:26px 16px 46px}
+  .page-head h1{font-size:19.5px}
+  .page-head p{font-size:13px}
+  .form-body{padding:22px 18px 24px}
+  .card-head{padding:14px 18px}
+  .card-body{padding:20px 18px}
+  .grid-2{grid-template-columns:1fr;gap:0}
+  .venue-row{grid-template-columns:1fr}
+  .attach-btn{padding:12px 16px;justify-content:center}
+  .choice-grid{grid-template-columns:1fr 1fr;gap:9px}
+  .tabs{padding:6px;gap:4px}
+  .tab{font-size:12.5px;padding:11px 4px;gap:6px}
+  .tab svg{width:15px;height:15px}
+  .modal{max-height:92vh;border-radius:18px}
+  .modal-head{padding:18px}
+  .modal-body{padding:18px}
+  .modal-foot{padding:15px 18px}
+  .modal-foot button{font-size:13px;padding:12px 8px}
+  .trip-row{gap:10px}
+  .seg{width:100%}
+  .seg button{flex:1;padding:9px 8px}
+  .pick{padding:22px}
+  .pick-title{font-size:16px}
+  .btn-row{flex-direction:column}
+  .btn-row .btn{width:100%}
+  .form-actions{flex-direction:column-reverse}
+  .form-actions .btn,
+  .form-actions .submit{width:100%}
+}
+
+@media (max-width:420px){
+  .tab span{display:none}
+  .tab{padding:12px 4px}
+  .topbar-back span{display:none}
+  .topbar-back{padding:9px 11px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}

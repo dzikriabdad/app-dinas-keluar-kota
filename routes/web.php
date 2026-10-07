@@ -3,19 +3,24 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DinasController;
 
-// Halaman Form Input, Preview & Simpan
-Route::get('/', [DinasController::class, 'create'])->name('dinas.create');
+/* ── Halaman awal: pilih formulir ───────────────────────── */
+Route::view('/', 'home')->name('home');
+
+/* ── Form pemesanan hotel & tiket ───────────────────────── */
+Route::view('/order', 'order.input')->name('order.input');
+
+/* ── Form dinas: input, preview, simpan ─────────────────── */
+Route::get('/dinas', [DinasController::class, 'create'])->name('dinas.create');
 Route::post('/preview', [DinasController::class, 'preview'])->name('dinas.preview');
 Route::post('/simpan-cetak', [DinasController::class, 'store'])->name('dinas.store');
 
-// Fitur Login Admin
+/* ── Fitur login admin ──────────────────────────────────── */
 Route::get('/admin/login', [DinasController::class, 'login'])->name('admin.login');
 Route::post('/admin/login', [DinasController::class, 'prosesLogin'])->name('admin.proses_login');
 Route::get('/admin/logout', [DinasController::class, 'logout'])->name('admin.logout');
 
-// Halaman Admin (Dilindungi Password)
+/* ── Halaman admin ──────────────────────────────────────── */
 Route::get('/admin', [DinasController::class, 'index'])->name('admin.dinas');
 Route::delete('/admin/hapus/{id}', [DinasController::class, 'destroy'])->name('admin.hapus');
 Route::get('/admin/export', [DinasController::class, 'export'])->name('admin.export');
-// Tambahin di dalam prefix/group admin
-Route::get('/admin/cetak/{id}', [App\Http\Controllers\DinasController::class, 'cetak_admin'])->name('admin.cetak');
+Route::get('/admin/cetak/{id}', [DinasController::class, 'cetak_admin'])->name('admin.cetak');
