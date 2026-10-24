@@ -136,7 +136,7 @@
         @if($dinas->jenis_form != 'uang_makan')
         <div class="sig-box">
             <div class="sig-date"></div>
-            <div class="sig-title">Manager / Kabag /<br>Kasi / Kapel</div>
+            <div class="sig-title">Pimpinan</div>
             <div class="sig-space"></div>
             <div class="sig-line"></div>
         </div>

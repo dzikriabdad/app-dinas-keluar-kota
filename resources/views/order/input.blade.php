@@ -289,11 +289,11 @@
         <div class="grid-2">
           <div class="field">
             <label for="k-asal">Dari Kota / Stasiun</label>
-            <input type="text" id="k-asal" name="stasiun_asal" placeholder="Contoh: Stasiun Gambir, Jakarta" required>
+            <input type="text" id="k-asal" name="stasiun_asal" placeholder="Contoh: Stasiun Gambir/Jakarta" required>
           </div>
           <div class="field">
             <label for="k-tujuan">Ke Kota / Stasiun</label>
-            <input type="text" id="k-tujuan" name="stasiun_tujuan" placeholder="Contoh: Stasiun Tugu, Yogyakarta" required>
+            <input type="text" id="k-tujuan" name="stasiun_tujuan" placeholder="Contoh: Stasiun Tugu/Yogyakarta" required>
           </div>
         </div>
 
