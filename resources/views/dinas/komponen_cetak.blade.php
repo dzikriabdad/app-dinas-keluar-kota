@@ -1,6 +1,19 @@
+@php
+    if (is_string($dinas->detail_data)) {
+        $data = json_decode($dinas->detail_data, true) ?: [];
+    } else {
+        $data = is_array($dinas->detail_data)
+            ? $dinas->detail_data
+            : (array) $dinas->detail_data;
+    }
+
+    $isLuarNegeri = $dinas->jenis_form == 'pasca_tugas'
+        && in_array('Luar Negeri', (array) ($data['pasca_wilayah'] ?? []), true);
+@endphp
+
 <!-- JUDUL OTOMATIS -->
 <div class="form-title">
-    @if($dinas->jenis_form == 'pra_tugas') FORM PRA TUGAS DINAS LUAR KOTA 
+    @if($dinas->jenis_form == 'pra_tugas') FORM PRA TUGAS DINAS LUAR KOTA
     @elseif($dinas->jenis_form == 'pasca_tugas') FORM PASCA TUGAS DINAS LUAR KOTA
     @elseif($dinas->jenis_form == 'uang_makan') FORM UANG MAKAN TUGAS LUAR KOTA
     @elseif($dinas->jenis_form == 'undangan_dinas') FORM PASCA UNDANGAN DINAS
@@ -29,13 +42,11 @@
         <td>Jabatan</td>
         <td>:</td>
         <td class="meta-val">{{ $dinas->jabatan }}</td>
-        <td>Kota</td>
+        <td>{{ $isLuarNegeri ? 'Negara' : 'Kota' }}</td>
         <td>:</td>
         <td class="meta-val">{{ $dinas->kota_tujuan }}</td>
     </tr>
 </table>
-
-@php $data = is_array($dinas->detail_data) ? $dinas->detail_data : (array) $dinas->detail_data; @endphp
 
 <!-- 1. TABEL PRA TUGAS -->
 @if($dinas->jenis_form == 'pra_tugas')
