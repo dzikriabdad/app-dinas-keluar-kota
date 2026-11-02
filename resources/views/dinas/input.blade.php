@@ -6,31 +6,62 @@
 
 @section('topbar-action')
   <a class="topbar-back" href="{{ route('home') }}">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M19 12H5M11 18l-6-6 6-6"/>
+    </svg>
     <span>Menu utama</span>
   </a>
 @endsection
 
 @push('styles')
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <style>
+    #formDinas .form-section {
+      display: none;
+    }
+
+    #formDinas .form-section.active {
+      display: block;
+    }
+
+    #formDinas .uang-tugas {
+      margin-top: 8px;
+    }
+
+    #formDinas .uang-tugas:not([readonly]) {
+      background: #fff;
+      border-color: #2563eb;
+      color: #0f172a;
+    }
+
+    #formDinas .manual-rupiah-note {
+      display: none;
+      margin: 6px 0 0;
+      color: #475569;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    #formDinas .manual-rupiah-note.is-visible {
+      display: block;
+    }
+  </style>
 @endpush
 
 @section('content')
-
   <div class="page-head">
     <h1>Aplikasi Form Dinas Keluar Kota</h1>
-    <p>Lengkapi data pegawai, pilih jenis form, lalu isi rincian kegiatan. Tarif uang tugas dan uang makan dihitung otomatis berdasarkan jabatan dan wilayah tujuan.</p>
+    <p>Lengkapi data pegawai, pilih jenis form, lalu isi rincian kegiatan. Tarif domestik dihitung otomatis berdasarkan jabatan dan wilayah tujuan. Uang tugas Luar Negeri diisi manual dalam rupiah.</p>
     <div class="rule"></div>
   </div>
 
   <form action="{{ route('dinas.preview') }}" method="POST" id="formDinas">
     @csrf
 
-    {{-- ══════════ 1. DATA PEGAWAI & DOKUMEN ══════════ --}}
+    {{-- DATA PEGAWAI DAN DOKUMEN --}}
     <div class="card">
       <div class="card-head">Data Pegawai &amp; Dokumen</div>
       <div class="card-body">
-
         <div class="grid-3">
           <div class="field">
             <label for="nama">Nama Pegawai</label>
@@ -65,9 +96,10 @@
           </div>
 
           <div class="field">
-            <label for="kotaTujuanGlobal">Kota Tujuan <span class="hint">(wilayah terdeteksi otomatis)</span></label>
+            <label for="kotaTujuanGlobal">Kota Tujuan <span class="hint">(wilayah domestik terdeteksi otomatis)</span></label>
             <input type="text" name="kota_tujuan" id="kotaTujuanGlobal"
-                   placeholder="Ketik nama kota, misal: Bandung / Semarang" required>
+                   placeholder="Ketik nama kota, misal: Bandung / Tokyo" required>
+            <p class="field-note">Untuk perjalanan luar negeri, pilih wilayah Luar Negeri secara manual pada rincian Pasca Tugas.</p>
           </div>
         </div>
 
@@ -82,15 +114,13 @@
           </select>
           <p class="field-note">Bagian rincian di bawah akan menyesuaikan pilihan ini.</p>
         </div>
-
       </div>
     </div>
 
-    {{-- ══════════ 2A. PRA TUGAS ══════════ --}}
+    {{-- PRA TUGAS --}}
     <div class="card form-section" id="section_pra_tugas">
       <div class="card-head">Rencana Kegiatan — Pra Tugas</div>
       <div class="card-body">
-
         <div class="table-wrap">
           <div class="table-scroll">
             <table class="table" id="tablePraTugas">
@@ -109,14 +139,14 @@
         <div class="btn-row">
           <button type="button" class="btn btn-ghost btn-sm" onclick="tambahBaris('tablePraTugas', 'pra')">+ Tambah Baris</button>
         </div>
-
       </div>
     </div>
 
-    {{-- ══════════ 2B. PASCA TUGAS ══════════ --}}
+    {{-- PASCA TUGAS --}}
     <div class="card form-section" id="section_pasca_tugas">
       <div class="card-head">Realisasi Kegiatan — Pasca Tugas</div>
       <div class="card-body">
+        <p class="field-note">Uang tugas wilayah domestik terisi otomatis. Untuk Luar Negeri, masukkan nominal rupiah tanpa titik atau koma, misalnya 500000.</p>
 
         <div class="table-wrap">
           <div class="table-scroll">
@@ -125,7 +155,7 @@
                 <tr>
                   <th style="width:20%">Tanggal (Harian)</th>
                   <th>Realisasi Kegiatan</th>
-                  <th style="width:22%">Wilayah &amp; Uang Tugas <span class="hint">(otomatis)</span></th>
+                  <th style="width:22%">Wilayah &amp; Uang Tugas <span class="hint">(Rp)</span></th>
                   <th style="width:8%">Aksi</th>
                 </tr>
               </thead>
@@ -144,15 +174,13 @@
         <div class="btn-row">
           <button type="button" class="btn btn-ghost btn-sm" onclick="tambahBaris('tablePascaTugas', 'pasca')">+ Tambah Baris</button>
         </div>
-
       </div>
     </div>
 
-    {{-- ══════════ 2C. UANG MAKAN ══════════ --}}
+    {{-- UANG MAKAN --}}
     <div class="card form-section" id="section_uang_makan">
       <div class="card-head">Rincian Uang Makan &amp; Snack</div>
       <div class="card-body">
-
         <div class="table-wrap">
           <div class="table-scroll">
             <table class="table" id="tableUangMakan">
@@ -179,15 +207,13 @@
         <div class="btn-row">
           <button type="button" class="btn btn-ghost btn-sm" onclick="tambahBaris('tableUangMakan', 'um')">+ Tambah Baris</button>
         </div>
-
       </div>
     </div>
 
-    {{-- ══════════ 2D. UNDANGAN DINAS ══════════ --}}
+    {{-- UNDANGAN DINAS --}}
     <div class="card form-section" id="section_undangan_dinas">
       <div class="card-head">Realisasi Kegiatan — Undangan Dinas</div>
       <div class="card-body">
-
         <div class="grid-3">
           <div class="field">
             <label for="undanganTgl">Tanggal Pelaksanaan</label>
@@ -221,18 +247,14 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
-    {{-- ══════════ AKSI ══════════ --}}
     <div class="form-actions">
       <button type="reset" class="btn">Reset Form</button>
       <button type="submit" class="submit">Simpan Data &amp; Cetak Form</button>
     </div>
-
   </form>
-
 @endsection
 
 @push('scripts')
@@ -241,31 +263,61 @@
 <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
 
 <script>
-    // MENCEGAH ENTER MENSUBMIT FORM
-    $('#formDinas').on('keypress', function(e) {
-        if (e.target.tagName.toLowerCase() === 'textarea') {
-            return true;
-        }
-        if (e.keyCode == 13) {
-            e.preventDefault();
-            return false;
-        }
-    });
-
     let globalMinDate = null;
     let globalMaxDate = null;
 
-    // MATRIKS TARIF DINAS
     const tarifDinas = {
-        "Sopir": { "Kudus": {ut: 0, um: 0}, "Kars. Pati": {ut: 15000, um: 30000}, "Jateng & DIY": {ut: 25000, um: 40000}, "Jatim & Madura": {ut: 30000, um: 40000}, "Jabar & DKI": {ut: 40000, um: 50000}, "Luar Jawa": {ut: 40000, um: 60000} },
-        "Pelaksana": { "Kudus": {ut: 0, um: 15000}, "Kars. Pati": {ut: 20000, um: 45000}, "Jateng & DIY": {ut: 50000, um: 50000}, "Jatim & Madura": {ut: 75000, um: 50000}, "Jabar & DKI": {ut: 75000, um: 60000}, "Luar Jawa": {ut: 100000, um: 75000} },
-        "Kapel": { "Kudus": {ut: 0, um: 20000}, "Kars. Pati": {ut: 25000, um: 50000}, "Jateng & DIY": {ut: 75000, um: 50000}, "Jatim & Madura": {ut: 75000, um: 75000}, "Jabar & DKI": {ut: 75000, um: 75000}, "Luar Jawa": {ut: 100000, um: 100000} },
-        "Kasie": { "Kudus": {ut: 0, um: 25000}, "Kars. Pati": {ut: 50000, um: 75000}, "Jateng & DIY": {ut: 75000, um: 75000}, "Jatim & Madura": {ut: 100000, um: 75000}, "Jabar & DKI": {ut: 100000, um: 75000}, "Luar Jawa": {ut: 125000, um: 100000} },
-        "Kabag": { "Kudus": {ut: 0, um: 0}, "Kars. Pati": {ut: 75000, um: 'REIMBURSE'}, "Jateng & DIY": {ut: 100000, um: 'REIMBURSE'}, "Jatim & Madura": {ut: 125000, um: 'REIMBURSE'}, "Jabar & DKI": {ut: 125000, um: 'REIMBURSE'}, "Luar Jawa": {ut: 150000, um: 'REIMBURSE'} },
-        "Manager": { "Kudus": {ut: 0, um: 0}, "Kars. Pati": {ut: 150000, um: 'REIMBURSE'}, "Jateng & DIY": {ut: 200000, um: 'REIMBURSE'}, "Jatim & Madura": {ut: 250000, um: 'REIMBURSE'}, "Jabar & DKI": {ut: 300000, um: 'REIMBURSE'}, "Luar Jawa": {ut: 400000, um: 'REIMBURSE'} }
+        "Sopir": {
+            "Kudus": {ut: 0, um: 0},
+            "Kars. Pati": {ut: 15000, um: 30000},
+            "Jateng & DIY": {ut: 25000, um: 40000},
+            "Jatim & Madura": {ut: 30000, um: 40000},
+            "Jabar & DKI": {ut: 40000, um: 50000},
+            "Luar Jawa": {ut: 40000, um: 60000}
+        },
+        "Pelaksana": {
+            "Kudus": {ut: 0, um: 15000},
+            "Kars. Pati": {ut: 20000, um: 45000},
+            "Jateng & DIY": {ut: 50000, um: 50000},
+            "Jatim & Madura": {ut: 75000, um: 50000},
+            "Jabar & DKI": {ut: 75000, um: 60000},
+            "Luar Jawa": {ut: 100000, um: 75000}
+        },
+        "Kapel": {
+            "Kudus": {ut: 0, um: 20000},
+            "Kars. Pati": {ut: 25000, um: 50000},
+            "Jateng & DIY": {ut: 75000, um: 50000},
+            "Jatim & Madura": {ut: 75000, um: 75000},
+            "Jabar & DKI": {ut: 75000, um: 75000},
+            "Luar Jawa": {ut: 100000, um: 100000}
+        },
+        "Kasie": {
+            "Kudus": {ut: 0, um: 25000},
+            "Kars. Pati": {ut: 50000, um: 75000},
+            "Jateng & DIY": {ut: 75000, um: 75000},
+            "Jatim & Madura": {ut: 100000, um: 75000},
+            "Jabar & DKI": {ut: 100000, um: 75000},
+            "Luar Jawa": {ut: 125000, um: 100000}
+        },
+        "Kabag": {
+            "Kudus": {ut: 0, um: 0},
+            "Kars. Pati": {ut: 75000, um: 'REIMBURSE'},
+            "Jateng & DIY": {ut: 100000, um: 'REIMBURSE'},
+            "Jatim & Madura": {ut: 125000, um: 'REIMBURSE'},
+            "Jabar & DKI": {ut: 125000, um: 'REIMBURSE'},
+            "Luar Jawa": {ut: 150000, um: 'REIMBURSE'}
+        },
+        "Manager": {
+            "Kudus": {ut: 0, um: 0},
+            "Kars. Pati": {ut: 150000, um: 'REIMBURSE'},
+            "Jateng & DIY": {ut: 200000, um: 'REIMBURSE'},
+            "Jatim & Madura": {ut: 250000, um: 'REIMBURSE'},
+            "Jabar & DKI": {ut: 300000, um: 'REIMBURSE'},
+            "Luar Jawa": {ut: 400000, um: 'REIMBURSE'}
+        }
     };
 
-    const optionsWilayah = `
+    const optionsWilayahDomestik = `
         <option value="Kudus">Kudus</option>
         <option value="Kars. Pati">Kars. Pati</option>
         <option value="Jateng & DIY">Jateng & DIY</option>
@@ -274,320 +326,526 @@
         <option value="Luar Jawa">Luar Jawa</option>
     `;
 
-    // DETEKSI KOTA -> WILAYAH
+    const optionsWilayah = optionsWilayahDomestik + `
+        <option value="Luar Negeri">Luar Negeri</option>
+    `;
+
+    const lockAttr = 'readonly onkeydown="return false;" autocomplete="off"';
+
+    $('#formDinas').on('keypress', function(e) {
+        if (e.target.tagName.toLowerCase() === 'textarea') return true;
+
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
     function autoDeteksiWilayah(kotaInput) {
-        let k = kotaInput.toLowerCase();
+        const k = String(kotaInput || '').toLowerCase();
 
         if (k.includes('kudus')) return 'Kudus';
-        let karsPati = ['jepara', 'pati', 'rembang', 'blora'];
+
+        const karsPati = ['jepara', 'pati', 'rembang', 'blora'];
         if (karsPati.some(c => k.includes(c))) return 'Kars. Pati';
 
-        let jatengDiy = ['demak', 'grobogan', 'purwodadi', 'semarang', 'salatiga', 'kendal', 'batang', 'pekalongan', 'tegal', 'brebes', 'pemalang', 'banyumas', 'purwokerto', 'purbalingga', 'cilacap', 'kebumen', 'temanggung', 'wonosobo', 'banjarnegara', 'surakarta', 'solo', 'karanganyar', 'sragen', 'boyolali', 'klaten', 'sukoharjo', 'magelang', 'purworejo', 'yogjakarta', 'yogyakarta', 'jogja', 'bantul', 'sleman', 'kulon progo', 'wonogiri', 'gunung kidul', 'pacitan'];
+        const jatengDiy = ['demak', 'grobogan', 'purwodadi', 'semarang', 'salatiga', 'kendal', 'batang', 'pekalongan', 'tegal', 'brebes', 'pemalang', 'banyumas', 'purwokerto', 'purbalingga', 'cilacap', 'kebumen', 'temanggung', 'wonosobo', 'banjarnegara', 'surakarta', 'solo', 'karanganyar', 'sragen', 'boyolali', 'klaten', 'sukoharjo', 'magelang', 'purworejo', 'yogjakarta', 'yogyakarta', 'jogja', 'bantul', 'sleman', 'kulon progo', 'wonogiri', 'gunung kidul', 'pacitan'];
         if (jatengDiy.some(c => k.includes(c))) return 'Jateng & DIY';
 
-        let jatim = ['malang', 'batu', 'pasuruan', 'lumajang', 'probolinggo', 'jember', 'bondowoso', 'situbondo', 'banyuwangi', 'sampang', 'pamekasan', 'sumenep', 'bangkalan', 'sidoarjo', 'surabaya', 'gresik', 'jombang', 'mojokerto', 'lamongan', 'babat', 'bojonegoro', 'tuban', 'nganjuk', 'kediri', 'tulungagung', 'blitar', 'trenggalek', 'madiun', 'ponorogo', 'ngawi', 'magetan'];
+        const jatim = ['malang', 'batu', 'pasuruan', 'lumajang', 'probolinggo', 'jember', 'bondowoso', 'situbondo', 'banyuwangi', 'sampang', 'pamekasan', 'sumenep', 'bangkalan', 'sidoarjo', 'surabaya', 'gresik', 'jombang', 'mojokerto', 'lamongan', 'babat', 'bojonegoro', 'tuban', 'nganjuk', 'kediri', 'tulungagung', 'blitar', 'trenggalek', 'madiun', 'ponorogo', 'ngawi', 'magetan'];
         if (jatim.some(c => k.includes(c))) return 'Jatim & Madura';
 
-        let jabarDki = ['jakarta', 'seribu', 'depok', 'bekasi', 'bogor', 'pandeglang', 'serang', 'cilegon', 'karawang', 'tangerang', 'bandung', 'cimahi', 'garut', 'sumedang', 'ciamis', 'pangandaran', 'tasikmalaya', 'banjar', 'cianjur', 'sukabumi', 'cirebon', 'kuningan', 'majalengka', 'indramayu', 'purwakarta', 'subang'];
-        if (jabarDki.some(c => k.includes(c))) return 'Jabar & DKI';
-
-        let luarJawa = ['banjarmasin', 'tanah laut', 'pangkalan bun', 'kotawari', 'bali', 'denpasar', 'lombok', 'lampung', 'jambi', 'sarolangun', 'pekanbaru', 'rokanhilir', 'indragiri hulu', 'indragiri hilir', 'medan', 'padang', 'palembang', 'batam', 'bengkulu', 'aceh', 'pangkalpinang', 'tanjungpinang', 'dumai', 'bukittinggi', 'lubuklinggau', 'pontianak', 'samarinda', 'balikpapan', 'palangkaraya', 'tarakan', 'banjarbaru', 'singkawang', 'bontang', 'makassar', 'manado', 'palu', 'kendari', 'bitung', 'gorontalo', 'palopo', 'baubau', 'parepare', 'mataram', 'kupang', 'bima', 'ambon', 'ternate', 'jayapura', 'sorong', 'manokwari', 'papua', 'maluku', 'sumatera', 'kalimantan', 'sulawesi', 'riau'];
+        // Cek Luar Jawa sebelum Jabar agar "Banjarmasin" tidak cocok dengan "Banjar".
+        const luarJawa = ['banjarmasin', 'tanah laut', 'pangkalan bun', 'kotawari', 'bali', 'denpasar', 'lombok', 'lampung', 'jambi', 'sarolangun', 'pekanbaru', 'rokanhilir', 'indragiri hulu', 'indragiri hilir', 'medan', 'padang', 'palembang', 'batam', 'bengkulu', 'aceh', 'pangkalpinang', 'tanjungpinang', 'dumai', 'bukittinggi', 'lubuklinggau', 'pontianak', 'samarinda', 'balikpapan', 'palangkaraya', 'tarakan', 'banjarbaru', 'singkawang', 'bontang', 'makassar', 'manado', 'palu', 'kendari', 'bitung', 'gorontalo', 'palopo', 'baubau', 'parepare', 'mataram', 'kupang', 'bima', 'ambon', 'ternate', 'jayapura', 'sorong', 'manokwari', 'papua', 'maluku', 'sumatera', 'kalimantan', 'sulawesi', 'riau'];
         if (luarJawa.some(c => k.includes(c))) return 'Luar Jawa';
+
+        const jabarDki = ['jakarta', 'seribu', 'depok', 'bekasi', 'bogor', 'pandeglang', 'serang', 'cilegon', 'karawang', 'tangerang', 'bandung', 'cimahi', 'garut', 'sumedang', 'ciamis', 'pangandaran', 'tasikmalaya', 'banjar', 'cianjur', 'sukabumi', 'cirebon', 'kuningan', 'majalengka', 'indramayu', 'purwakarta', 'subang'];
+        if (jabarDki.some(c => k.includes(c))) return 'Jabar & DKI';
 
         return '';
     }
 
-    // UPDATE SEMUA KALENDER DI TABEL SAAT TANGGAL UTAMA BERUBAH
+    function jumlahHari(selectedDates) {
+        if (!selectedDates.length) return 0;
+        if (selectedDates.length === 1) return 1;
+
+        const awal = selectedDates[0];
+        const akhir = selectedDates[selectedDates.length - 1];
+        const mulai = Date.UTC(awal.getFullYear(), awal.getMonth(), awal.getDate());
+        const selesai = Date.UTC(akhir.getFullYear(), akhir.getMonth(), akhir.getDate());
+
+        return Math.round(Math.abs(selesai - mulai) / 86400000) + 1;
+    }
+
+    function sinkronTanggalUM(instance) {
+        const group = $(instance.element).closest('tbody');
+        group.find('.tgl-snack').val(instance.input.value);
+        group.find('.um-hari-makan')
+            .val(jumlahHari(instance.selectedDates))
+            .trigger('change');
+    }
+
     function applyDateRestrictions() {
-        let childCalendars = document.querySelectorAll('.date-single, .date-range-um');
-        childCalendars.forEach(el => {
-            if (el._flatpickr) {
-                el._flatpickr.set('minDate', globalMinDate);
-                el._flatpickr.set('maxDate', globalMaxDate);
+        document.querySelectorAll('.date-single, .date-range-um, .date-range-undangan').forEach(el => {
+            if (!el._flatpickr) return;
 
-                let sel = el._flatpickr.selectedDates;
-                if (sel.length > 0 && globalMinDate && globalMaxDate) {
-                    let minTime = globalMinDate.getTime();
-                    let maxTime = globalMaxDate.getTime();
-                    let isOut = false;
+            const fp = el._flatpickr;
+            const tanggalLama = fp.selectedDates.slice();
 
-                    sel.forEach(d => {
-                        let t = new Date(d);
-                        t.setHours(0,0,0,0);
-                        if(t.getTime() < minTime || t.getTime() > maxTime) isOut = true;
-                    });
+            fp.set('minDate', globalMinDate);
+            fp.set('maxDate', globalMaxDate);
 
-                    if(isOut) {
-                        el._flatpickr.clear();
-                        let group = $(el).closest('tbody');
-                        if(group.hasClass('um-group')) {
-                            group.find('.um-hari-makan').val(0).trigger('change');
-                            group.find('.tgl-snack').val('');
-                        }
-                    }
-                }
+            const diLuarRentang = tanggalLama.some(date => {
+                return (globalMinDate && date.getTime() < globalMinDate.getTime()) ||
+                       (globalMaxDate && date.getTime() > globalMaxDate.getTime());
+            });
+
+            if (diLuarRentang) fp.clear();
+
+            if ($(el).hasClass('date-range-um')) {
+                sinkronTanggalUM(fp);
             }
         });
     }
 
-    // INISIALISASI KALENDER UTAMA
-    flatpickr("#tanggalDokumen", {
-        mode: "range",
-        dateFormat: "d F Y",
-        locale: "id",
+    const kalenderUtama = flatpickr('#tanggalDokumen', {
+        mode: 'range',
+        dateFormat: 'd F Y',
+        locale: 'id',
         disableMobile: true,
         allowInput: false,
-        onChange: function(selectedDates, dateStr) {
-            if (selectedDates.length > 0) {
+        onChange: function(selectedDates) {
+            if (selectedDates.length) {
                 globalMinDate = new Date(selectedDates[0]);
-                globalMinDate.setHours(0,0,0,0);
+                globalMinDate.setHours(0, 0, 0, 0);
+
                 globalMaxDate = new Date(selectedDates[selectedDates.length - 1]);
-                globalMaxDate.setHours(23,59,59,999);
+                globalMaxDate.setHours(23, 59, 59, 999);
             } else {
                 globalMinDate = null;
                 globalMaxDate = null;
             }
+
             applyDateRestrictions();
 
-            // Otomatis isi tanggal di Form Uang Makan
-            $('.date-range-um').val(dateStr);
-            if(selectedDates.length === 2) {
-                let diffTime = Math.abs(selectedDates[1] - selectedDates[0]);
-                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                $('.um-hari-makan').val(diffDays).trigger('change');
-            } else if (selectedDates.length === 1) {
-                $('.um-hari-makan').val(1).trigger('change');
-            }
-            $('.tgl-snack').val(dateStr);
+            document.querySelectorAll('.date-range-um').forEach(el => {
+                if (el._flatpickr) {
+                    el._flatpickr.setDate(selectedDates, false);
+                    sinkronTanggalUM(el._flatpickr);
+                }
+            });
 
-            // Otomatis isi tanggal di form Undangan Dinas
-            $('.date-range-undangan').val(dateStr);
-            let fpUndangan = document.querySelector('.date-range-undangan');
-            if(fpUndangan && fpUndangan._flatpickr) {
-                fpUndangan._flatpickr.setDate(selectedDates);
-            }
+            document.querySelectorAll('.date-range-undangan').forEach(el => {
+                if (el._flatpickr) {
+                    el._flatpickr.setDate(selectedDates, false);
+                }
+            });
         }
     });
 
-    // INISIALISASI KALENDER ANAK SECARA DINAMIS
     function initDatePickerChild(container) {
-        let optsSingle = { dateFormat: "d M Y", locale: "id", disableMobile: true, allowInput: false };
-        let optsRange = { mode: "range", dateFormat: "d M Y", locale: "id", disableMobile: true, allowInput: false };
+        const scope = container ? $(container) : $('#formDinas');
+        const baseOptions = {
+            dateFormat: 'd M Y',
+            locale: 'id',
+            disableMobile: true,
+            allowInput: false,
+            minDate: globalMinDate,
+            maxDate: globalMaxDate
+        };
 
-        if (globalMinDate) { optsSingle.minDate = globalMinDate; optsRange.minDate = globalMinDate; }
-        if (globalMaxDate) { optsSingle.maxDate = globalMaxDate; optsRange.maxDate = globalMaxDate; }
+        scope.find('.date-single').each(function() {
+            if (!this._flatpickr) flatpickr(this, Object.assign({}, baseOptions));
+        });
 
-        let elSingle = container ? $(container).find('.date-single').toArray() : $('.date-single').toArray();
-        if(elSingle.length) flatpickr(elSingle, optsSingle);
+        scope.find('.date-range-undangan').each(function() {
+            if (this._flatpickr) return;
 
-        let elUndangan = container ? $(container).find('.date-range-undangan').toArray() : $('.date-range-undangan').toArray();
-        if(elUndangan.length) flatpickr(elUndangan, { mode: "range", dateFormat: "d M Y", locale: "id", disableMobile: true, allowInput: false });
+            const fp = flatpickr(this, Object.assign({}, baseOptions, {
+                mode: 'range'
+            }));
 
-        let elUM = container ? $(container).find('.date-range-um').toArray() : $('.date-range-um').toArray();
-        if(elUM.length) {
-            let optsUM = Object.assign({}, optsRange, {
+            if (kalenderUtama.selectedDates.length) {
+                fp.setDate(kalenderUtama.selectedDates, false);
+            }
+        });
+
+        scope.find('.date-range-um').each(function() {
+            if (this._flatpickr) return;
+
+            const fp = flatpickr(this, Object.assign({}, baseOptions, {
+                mode: 'range',
                 onChange: function(selectedDates, dateStr, instance) {
-                    let group = $(instance.element).closest('tbody');
-                    group.find('.tgl-snack').val(dateStr);
-                    if (selectedDates.length === 2) {
-                        let diffTime = Math.abs(selectedDates[1] - selectedDates[0]);
-                        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                        group.find('.um-hari-makan').val(diffDays).trigger('change');
-                    } else if (selectedDates.length === 1) {
-                        group.find('.um-hari-makan').val(1).trigger('change');
-                    } else {
-                        group.find('.um-hari-makan').val(0).trigger('change');
-                    }
+                    sinkronTanggalUM(instance);
                 }
-            });
-            flatpickr(elUM, optsUM);
+            }));
+
+            if (kalenderUtama.selectedDates.length) {
+                fp.setDate(kalenderUtama.selectedDates, false);
+            }
+
+            sinkronTanggalUM(fp);
+        });
+    }
+
+    function aturSectionAktif() {
+        $('.form-section')
+            .removeClass('active')
+            .find('input, select, textarea, button')
+            .prop('disabled', true);
+
+        const jenis = $('#jenisFormSelect').val();
+
+        if (jenis) {
+            $('#section_' + jenis)
+                .addClass('active')
+                .find('input, select, textarea, button')
+                .prop('disabled', false);
         }
     }
 
-    // ===============================================
-    // JURUS DISABLE-ENABLE FORM MANDATORY
-    // ===============================================
-    $('#jenisFormSelect').on('change', function() {
-        $('.form-section').removeClass('active');
-
-        // Disable semua input di bagian form-section agar browser abaikan validasinya
-        $('.form-section').find('input, select, textarea, button').prop('disabled', true);
-
-        let val = $(this).val();
-        if(val) {
-            $('#section_' + val).addClass('active');
-
-            // Aktifkan hanya input/tombol di form yang lagi tampil
-            $('#section_' + val).find('input, select, textarea, button').prop('disabled', false);
-        }
-    });
+    $('#jenisFormSelect').on('change', aturSectionAktif);
 
     function hitungTotalPasca() {
         let total = 0;
-        let isReimburse = false;
-        $('#tablePascaTugas tbody tr').each(function() {
-            let val = $(this).find('.uang-tugas').val();
-            if(val === 'REIMBURSE' || val === 'REIMBURSEMENT') isReimburse = true;
-            else total += (parseFloat(val) || 0);
+
+        $('#tablePascaTugas .uang-tugas').each(function() {
+            total += parseFloat($(this).val()) || 0;
         });
-        if(isReimburse && total === 0) $('#totalPascaTugas').val('REIMBURSE');
-        else if (isReimburse) $('#totalPascaTugas').val(total + ' + REIMBURSE');
-        else $('#totalPascaTugas').val(total);
+
+        $('#totalPascaTugas').val('Rp ' + total.toLocaleString('id-ID'));
     }
 
     function hitungGrandTotalUM() {
         let grandTotal = 0;
         let isReimburse = false;
-        $('.um-total, .um-total-snack').each(function() {
-            let val = $(this).val();
-            if(val === 'REIMBURSE' || val === 'REIMBURSEMENT') isReimburse = true;
-            else grandTotal += (parseFloat(val) || 0);
-        });
-        if(isReimburse && grandTotal === 0) $('#grandTotalUM').val('REIMBURSE');
-        else if(isReimburse) $('#grandTotalUM').val(grandTotal + ' + REIMBURSE');
-        else $('#grandTotalUM').val(grandTotal);
-    }
 
-    const lockAttr = 'readonly onkeydown="return false;" autocomplete="off"';
+        $('#tableUangMakan .um-total, #tableUangMakan .um-total-snack').each(function() {
+            const val = $(this).val();
+
+            if (val === 'REIMBURSE' || val === 'REIMBURSEMENT') {
+                isReimburse = true;
+            } else {
+                grandTotal += parseFloat(val) || 0;
+            }
+        });
+
+        if (isReimburse && grandTotal === 0) {
+            $('#grandTotalUM').val('REIMBURSE');
+        } else if (isReimburse) {
+            $('#grandTotalUM').val(grandTotal + ' + REIMBURSE');
+        } else {
+            $('#grandTotalUM').val(grandTotal);
+        }
+    }
 
     function tambahBaris(tableId, tipe) {
-        let tbody = '';
+        let html = '';
+        let newContainer = null;
 
-        if(tipe === 'pra') {
-            tbody = `<tr>
-                        <td><input type="text" name="pra_tgl[]" ${lockAttr} class="locked-date date-single" placeholder="Pilih tgl" required></td>
-                        <td><input type="text" name="pra_kegiatan[]" placeholder="Rencana aktivitas..." required></td>
-                        <td><button type="button" class="btn btn-danger btn-sm btn-hapus-single-pra">Hapus</button></td>
-                     </tr>`;
-            $('#' + tableId + ' tbody').append(tbody);
-            initDatePickerChild($('#' + tableId + ' tbody').find('tr:last'));
+        if (tipe === 'pra') {
+            html = `
+                <tr>
+                    <td>
+                        <input type="text" name="pra_tgl[]" ${lockAttr}
+                               class="locked-date date-single" placeholder="Pilih tgl" required>
+                    </td>
+                    <td>
+                        <input type="text" name="pra_kegiatan[]" placeholder="Rencana aktivitas..." required>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm btn-hapus-single-pra">Hapus</button>
+                    </td>
+                </tr>
+            `;
 
-        } else if(tipe === 'pasca') {
-            tbody = `<tr>
-                        <td><input type="text" name="pasca_tgl[]" ${lockAttr} class="locked-date date-single" placeholder="Pilih tgl" required></td>
-                        <td><input type="text" name="pasca_kegiatan[]" placeholder="Realisasi aktivitas..." required></td>
+            $('#' + tableId + ' tbody').append(html);
+            newContainer = $('#' + tableId + ' tbody tr').last();
+            initDatePickerChild(newContainer);
+
+        } else if (tipe === 'pasca') {
+            html = `
+                <tr>
+                    <td>
+                        <input type="text" name="pasca_tgl[]" ${lockAttr}
+                               class="locked-date date-single" placeholder="Pilih tgl" required>
+                    </td>
+                    <td>
+                        <input type="text" name="pasca_kegiatan[]" placeholder="Realisasi aktivitas..." required>
+                    </td>
+                    <td>
+                        <select name="pasca_wilayah[]" class="row-wilayah" required>
+                            <option value="" disabled selected>Pilih Wilayah</option>
+                            ${optionsWilayah}
+                        </select>
+                        <input type="number" name="pasca_uang[]" class="uang-tugas"
+                               min="0" step="1" inputmode="numeric"
+                               readonly placeholder="Otomatis" aria-label="Uang tugas dalam rupiah" required>
+                        <p class="manual-rupiah-note">Isi rupiah tanpa titik atau koma. Contoh: 500000.</p>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm btn-hapus-single-pasca">Hapus</button>
+                    </td>
+                </tr>
+            `;
+
+            $('#' + tableId + ' tbody').append(html);
+            newContainer = $('#' + tableId + ' tbody tr').last();
+            initDatePickerChild(newContainer);
+
+            const wilayah = autoDeteksiWilayah($('#kotaTujuanGlobal').val());
+
+            if (wilayah) {
+                newContainer.find('.row-wilayah').val(wilayah).trigger('change');
+            }
+
+            hitungTotalPasca();
+
+        } else if (tipe === 'um') {
+            html = `
+                <tbody class="um-group">
+                    <tr>
                         <td>
-                            <select name="pasca_wilayah[]" class="row-wilayah" required><option value="" disabled selected>Pilih Wilayah</option>${optionsWilayah}</select>
-                            <input type="text" name="pasca_uang[]" class="uang-tugas" readonly placeholder="Otomatis" required>
+                            <input type="text" name="um_ket[]" class="cell-readonly"
+                                   value="Uang Makan" readonly required>
                         </td>
-                        <td><button type="button" class="btn btn-danger btn-sm btn-hapus-single-pasca">Hapus</button></td>
-                     </tr>`;
-            $('#' + tableId + ' tbody').append(tbody);
-            initDatePickerChild($('#' + tableId + ' tbody').find('tr:last'));
+                        <td>
+                            <input type="text" name="um_kota[]" class="input-kota-um"
+                                   placeholder="Ketik kota..." required>
+                        </td>
+                        <td>
+                            <input type="text" name="um_tgl[]" ${lockAttr}
+                                   class="locked-date date-range-um" placeholder="Pilih tgl" required>
+                        </td>
+                        <td>
+                            <input type="number" name="um_hari[]" class="um-hari-makan"
+                                   readonly placeholder="0" required>
+                        </td>
+                        <td>
+                            <select name="um_wilayah[]" class="row-wilayah" required>
+                                <option value="" disabled selected>Pilih Wilayah</option>
+                                ${optionsWilayahDomestik}
+                            </select>
+                            <input type="text" name="um_nominal[]" class="um-nominal"
+                                   readonly placeholder="Otomatis" required>
+                        </td>
+                        <td>
+                            <input type="text" name="um_total[]" class="um-total" readonly required>
+                        </td>
+                    </tr>
+                    <tr class="um-snack-row">
+                        <td>
+                            <input type="text" name="um_ket[]" class="cell-readonly"
+                                   value="Uang Snack" readonly required>
+                        </td>
+                        <td>
+                            <input type="text" name="um_kota[]" class="kota-snack cell-readonly"
+                                   readonly placeholder="-" required>
+                        </td>
+                        <td>
+                            <input type="text" name="um_tgl[]" class="tgl-snack cell-readonly"
+                                   readonly placeholder="-" required>
+                        </td>
+                        <td>
+                            <input type="number" name="um_hari[]" class="cell-readonly"
+                                   value="1" readonly required>
+                        </td>
+                        <td>
+                            <input type="number" name="um_nominal[]" class="um-nominal-snack"
+                                   value="40000" readonly required>
+                        </td>
+                        <td>
+                            <input type="text" name="um_total[]" class="um-total-snack"
+                                   value="40000" readonly required>
+                        </td>
+                    </tr>
+                </tbody>
+            `;
 
-        } else if(tipe === 'um') {
-            tbody = `<tbody class="um-group">
-                        <tr>
-                            <td><input type="text" name="um_ket[]" class="cell-readonly" value="Uang Makan" readonly required></td>
-                            <td><input type="text" name="um_kota[]" class="input-kota-um" placeholder="Ketik kota..." required></td>
-                            <td><input type="text" name="um_tgl[]" ${lockAttr} class="locked-date date-range-um" placeholder="Pilih tgl" required></td>
-                            <td><input type="number" name="um_hari[]" class="um-hari-makan" readonly placeholder="0" required></td>
-                            <td>
-                                <select name="um_wilayah[]" class="row-wilayah" required><option value="" disabled selected>Pilih Wilayah</option>${optionsWilayah}</select>
-                                <input type="text" name="um_nominal[]" class="um-nominal" readonly placeholder="Otomatis" required>
-                            </td>
-                            <td><input type="text" name="um_total[]" class="um-total" readonly required></td>
-                        </tr>
-                        <tr class="um-snack-row">
-                            <td><input type="text" name="um_ket[]" class="cell-readonly" value="Uang Snack" readonly required></td>
-                            <td><input type="text" name="um_kota[]" class="kota-snack cell-readonly" readonly placeholder="-" required></td>
-                            <td><input type="text" name="um_tgl[]" class="tgl-snack cell-readonly" readonly placeholder="-" required></td>
-                            <td><input type="number" name="um_hari[]" class="cell-readonly" value="1" readonly required></td>
-                            <td><input type="number" name="um_nominal[]" class="um-nominal-snack" value="40000" readonly required></td>
-                            <td><input type="text" name="um_total[]" class="um-total-snack" value="40000" readonly required></td>
-                        </tr>
-                     </tbody>`;
-            $('#' + tableId).append(tbody);
-            let newGroup = $('#' + tableId).find('tbody').last();
-            initDatePickerChild(newGroup);
+            $('#' + tableId + ' tfoot').before(html);
+            newContainer = $('#' + tableId + ' tbody.um-group').last();
+
+            initDatePickerChild(newContainer);
+
+            newContainer.find('.input-kota-um')
+                .val($('#kotaTujuanGlobal').val())
+                .trigger('blur');
+
+            hitungGrandTotalUM();
         }
 
-        let globalKota = $('#kotaTujuanGlobal').val();
-        if(globalKota) {
-            $('#kotaTujuanGlobal').trigger('blur');
-        }
-
-        if(tipe === 'um') hitungGrandTotalUM();
+        // Input baru di bagian tersembunyi juga harus dinonaktifkan.
+        aturSectionAktif();
     }
 
-    // AUTO-SYNC KOTA
-    $('#kotaTujuanGlobal').on('keyup blur', function() {
-        let kota = $(this).val();
-        let deteksiWilayah = autoDeteksiWilayah(kota);
+    $('#kotaTujuanGlobal').on('input blur', function() {
+        const kota = $(this).val();
+        const wilayah = autoDeteksiWilayah(kota);
 
         $('#tableUangMakan .input-kota-um').val(kota).trigger('blur');
-        if(deteksiWilayah) {
-            $('#tablePascaTugas .row-wilayah').val(deteksiWilayah).trigger('change');
+
+        if (wilayah) {
+            $('#tablePascaTugas .row-wilayah').each(function() {
+                // Jangan menimpa wilayah dan nominal Luar Negeri yang dipilih manual.
+                if ($(this).val() !== 'Luar Negeri') {
+                    $(this).val(wilayah).trigger('change');
+                }
+            });
         }
     });
 
-    $(document).on('keyup blur', '.input-kota-um', function() {
-        let group = $(this).closest('tbody');
-        let kota = $(this).val();
+    $(document).on('input blur', '.input-kota-um', function() {
+        const group = $(this).closest('tbody');
+        const kota = $(this).val();
+
         group.find('.kota-snack').val(kota);
-        let deteksiWilayah = autoDeteksiWilayah(kota);
-        if(deteksiWilayah) group.find('.row-wilayah').val(deteksiWilayah).trigger('change');
+
+        const wilayah = autoDeteksiWilayah(kota);
+
+        if (wilayah) {
+            group.find('.row-wilayah').val(wilayah).trigger('change');
+        }
     });
 
-    // AUTO-SYNC JABATAN
     $('#jabatanSelect').on('change', function() {
         $('.row-wilayah').trigger('change');
     });
 
     $(document).on('change', '.row-wilayah', function() {
-        let tr = $(this).closest('tr');
-        let jabatan = $('#jabatanSelect').val();
-        let wilayah = $(this).val();
+        const tr = $(this).closest('tr');
+        const jabatan = $('#jabatanSelect').val();
+        const wilayah = $(this).val();
+        const tarif = tarifDinas[jabatan]?.[wilayah];
 
-        if (jabatan && wilayah) {
-            let tarif = tarifDinas[jabatan][wilayah];
-            if (tr.closest('#tablePascaTugas').length > 0) {
-                tr.find('.uang-tugas').val(tarif.ut);
-                hitungTotalPasca();
-            } else if (tr.closest('tbody.um-group').length > 0) {
-                tr.find('.um-nominal').val(tarif.um).trigger('change');
+        if (tr.closest('#tablePascaTugas').length) {
+            const inputUang = tr.find('.uang-tugas');
+            const catatan = tr.find('.manual-rupiah-note');
+
+            if (wilayah === 'Luar Negeri') {
+                // Hapus tarif domestik hanya saat pertama beralih ke mode manual.
+                if (inputUang.prop('readonly')) {
+                    inputUang.val('');
+                }
+
+                inputUang
+                    .prop('readonly', false)
+                    .attr('placeholder', 'Isi nominal Rupiah');
+
+                catatan.addClass('is-visible');
+            } else {
+                inputUang
+                    .prop('readonly', true)
+                    .attr('placeholder', 'Otomatis')
+                    .val(tarif ? tarif.ut : '');
+
+                catatan.removeClass('is-visible');
             }
+
+            hitungTotalPasca();
+            return;
         }
+
+        if (tr.closest('tbody.um-group').length) {
+            tr.find('.um-nominal')
+                .val(tarif ? tarif.um : '')
+                .trigger('change');
+        }
+    });
+
+    $(document).on('input change', '.uang-tugas', function() {
+        hitungTotalPasca();
     });
 
     $('#pilihKategoriHari').on('change', function() {
         $('#undanganUang').val($(this).val());
     });
 
-    $(document).on('keyup change', '.um-hari-makan, .um-nominal', function() {
-        let tr = $(this).closest('tr');
-        let hari = parseFloat(tr.find('.um-hari-makan').val()) || 0;
-        let nominalVal = tr.find('.um-nominal').val();
-        if (nominalVal === 'REIMBURSE' || nominalVal === 'REIMBURSEMENT') tr.find('.um-total').val('REIMBURSE');
-        else tr.find('.um-total').val(hari * (parseFloat(nominalVal) || 0));
+    $(document).on('input change', '.um-hari-makan, .um-nominal', function() {
+        const tr = $(this).closest('tr');
+        const hari = parseFloat(tr.find('.um-hari-makan').val()) || 0;
+        const nominal = tr.find('.um-nominal').val();
+
+        if (nominal === 'REIMBURSE' || nominal === 'REIMBURSEMENT') {
+            tr.find('.um-total').val('REIMBURSE');
+        } else {
+            tr.find('.um-total').val(hari * (parseFloat(nominal) || 0));
+        }
+
         hitungGrandTotalUM();
     });
 
-    $(document).on('keyup change', '.um-nominal-snack', function() {
-        let tr = $(this).closest('tr');
-        tr.find('.um-total-snack').val(parseFloat($(this).val()) || 0);
+    $(document).on('input change', '.um-nominal-snack', function() {
+        $(this).closest('tr')
+            .find('.um-total-snack')
+            .val(parseFloat($(this).val()) || 0);
+
         hitungGrandTotalUM();
     });
+
+    function hapusBarisDenganKalender(row) {
+        row.find('input').each(function() {
+            if (this._flatpickr) this._flatpickr.destroy();
+        });
+
+        row.remove();
+    }
 
     $(document).on('click', '.btn-hapus-single-pra', function() {
-        if($(this).closest('tbody').find('tr').length > 1) $(this).closest('tr').remove();
+        const row = $(this).closest('tr');
+
+        if (row.closest('tbody').find('tr').length > 1) {
+            hapusBarisDenganKalender(row);
+        }
     });
 
     $(document).on('click', '.btn-hapus-single-pasca', function() {
-        if($(this).closest('tbody').find('tr').length > 1) {
-            $(this).closest('tr').remove();
+        const row = $(this).closest('tr');
+
+        if (row.closest('tbody').find('tr').length > 1) {
+            hapusBarisDenganKalender(row);
             hitungTotalPasca();
         }
     });
 
-    $(document).ready(function() {
-        // Trigger select jenis_form di awal buat nyembunyiin + disable semua section
-        $('#jenisFormSelect').trigger('change');
+    $('#formDinas').on('reset', function() {
+        // Jalankan setelah browser menyelesaikan reset nilai bawaan.
+        window.setTimeout(function() {
+            kalenderUtama.clear(false);
+            globalMinDate = null;
+            globalMaxDate = null;
 
+            $('.form-section input').each(function() {
+                if (this._flatpickr) this._flatpickr.destroy();
+            });
+
+            $('#tablePraTugas tbody').empty();
+            $('#tablePascaTugas tbody').empty();
+            $('#tableUangMakan tbody').remove();
+
+            $('#undanganTgl').val('');
+            $('#undanganUang').val('');
+
+            initDatePickerChild();
+            tambahBaris('tablePraTugas', 'pra');
+            tambahBaris('tablePascaTugas', 'pasca');
+            tambahBaris('tableUangMakan', 'um');
+
+            hitungTotalPasca();
+            hitungGrandTotalUM();
+            aturSectionAktif();
+        }, 0);
+    });
+
+    $(document).ready(function() {
         initDatePickerChild();
+
         tambahBaris('tablePraTugas', 'pra');
         tambahBaris('tablePascaTugas', 'pasca');
         tambahBaris('tableUangMakan', 'um');
+
+        hitungTotalPasca();
+        hitungGrandTotalUM();
+        aturSectionAktif();
     });
 </script>
 @endpush
